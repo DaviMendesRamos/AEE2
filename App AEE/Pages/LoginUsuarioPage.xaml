@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_AEE.Pages.LoginUsuarioPage"
+             Title="LoginUsuarioPage"
+             NavigationPage.HasNavigationBar="False">
+             
+
+    <StackLayout 
+        VerticalOptions='CenterAndExpand'
+        Margin="16"
+        Padding="16"
+        >
+        
+
+    <Label 
+            Text="LOGIN"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" 
+        />
+
+    <Label 
+            Text="Email"
+        />
+
+    <Entry
+            Placeholder="Digite seu email" 
+            x:Name="Email" 
+        />
+
+    <Label 
+            Text="Senha"
+        />
+
+    <Entry
+            Placeholder="Digite sua senha" 
+            x:Name="Senha" 
+        />
+
+    <Button Text="Entrar" 
+                x:Name="btnEntrar" 
+                Clicked="btnEntrar_Clicked"
+                Margin="10"
+                />
+
+    <Button x:Name="btnRegistrar"
+                Clicked="btnRegistrar_Clicked"
+                Text="Registre-se"
+                Margin="10"
+                />
+</StackLayout>
+
+
+</ContentPage>

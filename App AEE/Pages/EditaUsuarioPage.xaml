@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_AEE.Pages.EditaUsuarioPage"
+             Title="EditaUsuarioPage"
+             NavigationPage.HasNavigationBar="False">
+    <StackLayout 
+        VerticalOptions='CenterAndExpand'
+        Margin="16"
+        Padding="16"
+        >
+
+        <Label 
+            Text="Email"
+        />
+
+        <Entry
+            Placeholder="Digite seu email" 
+            x:Name="Email" 
+        />
+
+        <Label 
+            Text="Senha"
+        />
+
+        <Entry
+            Placeholder="Digite sua senha" 
+            x:Name="Senha" 
+        />
+
+        <Button Text="Cadastrar" 
+                x:Name="btnCadastrar" 
+                Clicked="btnCadastrar_Clicked"
+                Margin="10"
+                />
+        
+
+        <Button Text="Voltar"
+                x:Name="btnVoltar"
+                Clicked="btnVoltar_Clicked"
+                Margin="10"
+                />
+    </StackLayout>
+</ContentPage>
