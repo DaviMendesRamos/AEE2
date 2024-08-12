@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+             android:TabbedPage.ToolbarPlacement="Bottom"
+             x:Class="App_AEE.Pages.HomePrincipalPage"
+             Title="HomePrincipalPage"
+             NavigationPage.HasNavigationBar="False">
+    <StackLayout >
+        <Label 
+            Text=" Aplicativo Esportivo Escolar" 
+            Background="LightBlue" 
+            FontSize="Title"
+            FontFamily="Arial"
+            Margin="20"
+            HorizontalOptions="CenterAndExpand" />
+               
+    </StackLayout>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Button Text="Exibir Usuario" BackgroundColor="DarkGreen"
+               x:Name="btnExibirUsuario " Clicked=""
+    </Grid>
+    
+</ContentPage>

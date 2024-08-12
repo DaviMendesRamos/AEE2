@@ -17,6 +17,7 @@
         <Entry
             Placeholder="Digite seu email" 
             x:Name="Email" 
+            Text="{Binding Email}"
         />
 
         <Label 
@@ -26,6 +27,7 @@
         <Entry
             Placeholder="Digite sua senha" 
             x:Name="Senha" 
+            Text="{Binding Senha}"
         />
 
         <Button Text="Cadastrar" 

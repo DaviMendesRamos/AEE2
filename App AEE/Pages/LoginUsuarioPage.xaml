@@ -25,7 +25,7 @@
 
     <Entry
             Placeholder="Digite seu email" 
-            x:Name="Email" 
+            x:Name="txtEmail" 
         />
 
     <Label 
@@ -34,7 +34,7 @@
 
     <Entry
             Placeholder="Digite sua senha" 
-            x:Name="Senha" 
+            x:Name="txtSenha" 
         />
 
     <Button Text="Entrar" 

@@ -16,9 +16,9 @@ namespace App_AEE
 				if (_bancoDados == null)
 				{
 					_bancoDados =
-						new SQLiteData(DependencyService
-						.Get<ISQLiteBD>()
-						.SQLiteLocalPath("Dados.db3"));
+						new SQLiteData(Path.Combine(Environment.
+						GetFolderPath(Environment.SpecialFolder.
+						LocalApplicationData), "Dados.db3"));
 				}
 				return _bancoDados;
 			}
