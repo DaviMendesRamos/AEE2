@@ -62,8 +62,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\Home-button.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Remove="Pages\NewPage1.xaml" />
 	  <MauiXaml Remove="Pages\PaginaInicial.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\Home-button.png" />
+	  <None Remove="Resources\Images\home_button.png" />
 	</ItemGroup>
 
 	<ItemGroup>

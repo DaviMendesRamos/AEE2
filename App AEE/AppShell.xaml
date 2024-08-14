@@ -4,12 +4,25 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:App_AEE"
-    Shell.FlyoutBehavior="Disabled"
+    xmlns:pages="clr-namespace:App_AEE.Pages"
+    Shell.FlyoutBehavior="Flyout"
     Title="App_AEE">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Home"
+             ContentTemplate="{DataTemplate pages:HomePrincipalPage }"
+             Route="HomePrincipalPage"/>
+        
+        <ShellContent Title="Busca"
+      ContentTemplate="{DataTemplate pages:BuscaUsuarioPage }"
+      Route="BuscaUSuarioPage"/>
+        
+        <ShellContent Title="Lista"
+      ContentTemplate="{DataTemplate pages:ListaFeedPage }"
+      Route="ListaFeedPage"/>
+
+
+    </FlyoutItem>
+    
 
 </Shell>

@@ -21,16 +21,16 @@ public partial class LoginUsuarioPage : ContentPage
 			!string.IsNullOrWhiteSpace(senha)) ;
 		{
 			var usuario = await App.BancoDados.UsuarioDataTable.ObtemUsuario(email, senha);
-			
+
 			if (usuario == null)
 			{
-				await DisplayAlert("Atençõa", "Email ou senha Invalidos", "Fechar");
+				await DisplayAlert("Atenção", "Email ou senha Invalidos", "Fechar");
 				return;
 			}
 
 			App.Usuario = usuario;
 
-			Navigation.PushAsync(new HomePrincipalPage());
+			await Navigation.PushAsync(new HomePrincipalPage());
 		}
 
 	}

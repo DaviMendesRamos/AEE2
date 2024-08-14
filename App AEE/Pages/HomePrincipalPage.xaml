@@ -5,9 +5,14 @@
              android:TabbedPage.ToolbarPlacement="Bottom"
              x:Class="App_AEE.Pages.HomePrincipalPage"
              Title="HomePrincipalPage"
-             NavigationPage.HasNavigationBar="False">
-               
-    </StackLayout>
+             NavigationPage.HasNavigationBar="False"
+             Shell.FlyoutBehavior="Flyout">
+              
+    <StackLayout>
+        <Label Text="Pagina Principal" FontSize="Header"/>
 
+    </StackLayout>
+    
+    
     
 </ContentPage>
