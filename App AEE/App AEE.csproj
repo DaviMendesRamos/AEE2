@@ -72,7 +72,9 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\Home-button.png" />
+	  <None Remove="Resources\Images\home-button_icon-icons.com_72700.svg" />
 	  <None Remove="Resources\Images\home_button.png" />
+	  <None Remove="Resources\Images\pngwing.com.png" />
 	</ItemGroup>
 
 	<ItemGroup>
