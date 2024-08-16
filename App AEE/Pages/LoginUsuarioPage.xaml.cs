@@ -30,7 +30,9 @@ public partial class LoginUsuarioPage : ContentPage
 
 			App.Usuario = usuario;
 
-			await Navigation.PushAsync(new HomePrincipalPage());
+			Application.Current.MainPage = new AppShell();
+
+			await Shell.Current.GoToAsync("//home");
 		}
 
 	}

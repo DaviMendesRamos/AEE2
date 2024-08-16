@@ -63,6 +63,8 @@
 
 	<ItemGroup>
 	  <MauiImage Remove="Resources\Images\Home-button.png" />
+	  <MauiImage Remove="Resources\Images\home-button_icon-icons.com_72700.svg" />
+	  <MauiImage Remove="Resources\Images\pngwing.com.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -71,13 +73,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Fonts\arial.ttf" />
 	  <None Remove="Resources\Images\Home-button.png" />
 	  <None Remove="Resources\Images\home-button_icon-icons.com_72700.svg" />
 	  <None Remove="Resources\Images\home_button.png" />
+	  <None Remove="Resources\Images\logo_if.png" />
 	  <None Remove="Resources\Images\pngwing.com.png" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
+		<PackageReference Include="CommunityToolkit.Maui.Core" Version="9.0.2" />
+		<PackageReference Include="CommunityToolkit.Maui.Markup" Version="4.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />

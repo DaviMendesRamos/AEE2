@@ -2,11 +2,15 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_AEE.Pages.ExibirUsuarioPage"
-             Title="ExibirUsuarioPage">
+             Title="ExibirUsuarioPage"
+               Shell.NavBarIsVisible="False">
     <VerticalStackLayout>
         <Label 
-            Text="Exibir Pagina 2"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            Text="Seu Perfil"
+             FontSize="Large"
+                HorizontalTextAlignment="Center" FontAttributes="Bold"
+                FontAutoScalingEnabled="True" FontFamily="arial"/>
+
+        <Label/>
     </VerticalStackLayout>
 </ContentPage>

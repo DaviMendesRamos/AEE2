@@ -5,22 +5,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:App_AEE"
     xmlns:pages="clr-namespace:App_AEE.Pages"
-    Shell.FlyoutBehavior="Flyout"
+    Shell.FlyoutBehavior="Disabled"
     Title="App_AEE">
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent Title="Home"
              ContentTemplate="{DataTemplate pages:HomePrincipalPage }"
-             Route="HomePrincipalPage"/>
+             Route="home"/>
         
         <ShellContent Title="Busca"
-      ContentTemplate="{DataTemplate pages:BuscaUsuarioPage }"
-      Route="BuscaUSuarioPage"/>
+            ContentTemplate="{DataTemplate pages:BuscaUsuarioPage }"
+            Route="BuscaUSuarioPage"/>
         
         <ShellContent Title="Lista"
-      ContentTemplate="{DataTemplate pages:ListaFeedPage }"
-      Route="ListaFeedPage"/>
+            ContentTemplate="{DataTemplate pages:ListaFeedPage }"
+            Route="ListaFeedPage"/>
 
+        <ShellContent Title="Perfil"
+            ContentTemplate="{DataTemplate pages:ExibirUsuarioPage }"
+            Route="ExibirUsuario"/>
 
     </FlyoutItem>
     

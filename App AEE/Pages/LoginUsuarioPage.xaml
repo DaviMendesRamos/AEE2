@@ -1,54 +1,45 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="App_AEE.Pages.LoginUsuarioPage"
              Title="LoginUsuarioPage"
-             NavigationPage.HasNavigationBar="False">
-             
+             NavigationPage.HasNavigationBar="False"
+              BackgroundColor="White">
 
-    <StackLayout 
-        VerticalOptions='CenterAndExpand'
-        Margin="16"
-        Padding="16"
-        >
-        
 
-    <Label 
-            Text="LOGIN"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" 
-        />
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <toolkit:DockLayout>
+            <!--This is Header Space of the UI i.e Top Dock Position-->
+            <Grid  toolkit:DockLayout.DockPosition="Top" HeightRequest="200"  BackgroundColor="White" Margin="10">
+                <Image Source="logo_if.png"
+                WidthRequest="300"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="CenterAndExpand"></Image>
+            </Grid>
 
-    <Label 
-            Text="Email"
-        />
 
-    <Entry
-            Placeholder="Digite seu email" 
-            x:Name="txtEmail" 
-        />
+            
 
-    <Label 
-            Text="Senha"
-        />
+            <!--This is footer of the UI i.e bottom-->
+            <Grid  toolkit:DockLayout.DockPosition="Bottom"  HeightRequest="50"  BackgroundColor="DarkGreen">
+                <Label Text="IFRJ © " HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" TextColor="White"></Label>
+            </Grid>
 
-    <Entry
-            Placeholder="Digite sua senha" 
-            x:Name="txtSenha" 
-        />
-
-    <Button Text="Entrar" 
-                x:Name="btnEntrar" 
-                Clicked="btnEntrar_Clicked"
-                Margin="10"
-                />
-
-    <Button x:Name="btnRegistrar"
-                Clicked="btnRegistrar_Clicked"
-                Text="Registre-se"
-                Margin="10"
-                />
-</StackLayout>
+            <!--This Grid will keep all the controls to  center-->
+            <Grid   x:Name="CenterGrid" BackgroundColor="White">
+                <VerticalStackLayout VerticalOptions="CenterAndExpand" Spacing="30" Margin="20">
+                    <Label Text="Digite seu Email:"/>
+                    <Entry Placeholder="Email" x:Name="txtEmail"/>
+                    <Label Text="Digite sua Senha:"/>
+                    <Entry Placeholder="Senha" x:Name="txtSenha"/>
+                    <Button  Text="Login" BackgroundColor="Black" TextColor="White"></Button>
+                    <Label Text="Or" TextColor="Black" HorizontalOptions="CenterAndExpand"></Label>
+                    <Button  Text=" Cadastrar" BackgroundColor="Black" TextColor="White"/>
+                </VerticalStackLayout>
+            </Grid>
+        </toolkit:DockLayout>
+    </ScrollView>
 
 
 </ContentPage>
