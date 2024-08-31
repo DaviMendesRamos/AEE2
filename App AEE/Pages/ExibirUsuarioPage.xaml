@@ -11,6 +11,8 @@
                 HorizontalTextAlignment="Center" FontAttributes="Bold"
                 FontAutoScalingEnabled="True" FontFamily="arial"/>
 
+        <Button Text="Deslogar" x:Name="btndeslogar" Clicked="btndeslogar_Clicked"  />
+
         <Label/>
     </VerticalStackLayout>
 </ContentPage>

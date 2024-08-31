@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="App_AEE.Pages.EditaUsuarioPage"
              Title="EditaUsuarioPage"
              NavigationPage.HasNavigationBar="False">
+    
+    <ScrollView>
+        <Grid  toolkit:DockLayout.DockPosition="Bottom"  HeightRequest="50"  BackgroundColor="DarkGreen">
+            <Label Text="IFRJ © " HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" TextColor="White"></Label>
+        </Grid>
+        
     <StackLayout 
         VerticalOptions='CenterAndExpand'
         Margin="16"
@@ -34,6 +41,7 @@
                 x:Name="btnCadastrar" 
                 Clicked="btnCadastrar_Clicked"
                 Margin="10"
+                 BackgroundColor="Black" TextColor="White"
                 />
         
 
@@ -41,6 +49,9 @@
                 x:Name="btnVoltar"
                 Clicked="btnVoltar_Clicked"
                 Margin="10"
+                 BackgroundColor="Black" TextColor="White"
                 />
     </StackLayout>
+
+    </ScrollView>
 </ContentPage>

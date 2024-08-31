@@ -33,9 +33,9 @@
                     <Entry Placeholder="Email" x:Name="txtEmail"/>
                     <Label Text="Digite sua Senha:"/>
                     <Entry Placeholder="Senha" x:Name="txtSenha"/>
-                    <Button  Text="Login" BackgroundColor="Black" TextColor="White"></Button>
-                    <Label Text="Or" TextColor="Black" HorizontalOptions="CenterAndExpand"></Label>
-                    <Button  Text=" Cadastrar" BackgroundColor="Black" TextColor="White"/>
+                    <Button  Text="Login" BackgroundColor="Black" TextColor="White" x:Name="btnEntrar" Clicked="btnEntrar_Clicked"></Button>
+                    <Label Text="Ou" TextColor="Black" HorizontalOptions="CenterAndExpand"></Label>
+                    <Button  Text=" Cadastrar" BackgroundColor="Black" TextColor="White" x:Name="btnRegistrar" Clicked="btnRegistrar_Clicked" />
                 </VerticalStackLayout>
             </Grid>
         </toolkit:DockLayout>

@@ -13,6 +13,9 @@
          <Label Text="Pagina Principal" FontSize="Large"
                 HorizontalTextAlignment="Center" FontAttributes="Bold"
                 FontAutoScalingEnabled="True" FontFamily="arial"/>
+        
+        
+        
 
     </StackLayout>
 

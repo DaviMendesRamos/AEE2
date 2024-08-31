@@ -6,4 +6,9 @@ public partial class ExibirUsuarioPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	private void btndeslogar_Clicked(object sender, EventArgs e)
+	{
+
+    }
 }

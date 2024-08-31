@@ -3,20 +3,36 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App AEE", "App AEE\App AEE.csproj", "{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App AEE", "App AEE\App AEE.csproj", "{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM64 = Debug|ARM64
 		Release|Any CPU = Release|Any CPU
+		Release|ARM64 = Release|ARM64
+		teste|Any CPU = teste|Any CPU
+		teste|ARM64 = teste|ARM64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Debug|ARM64.Build.0 = Debug|ARM64
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Debug|ARM64.Deploy.0 = Debug|ARM64
 		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Release|ARM64.ActiveCfg = Release|ARM64
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Release|ARM64.Build.0 = Release|ARM64
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.Release|ARM64.Deploy.0 = Release|ARM64
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.teste|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.teste|Any CPU.Build.0 = Debug|Any CPU
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.teste|Any CPU.Deploy.0 = Debug|Any CPU
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.teste|ARM64.ActiveCfg = teste|ARM64
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.teste|ARM64.Build.0 = teste|ARM64
+		{E2BFA8C4-73A9-4116-8D8F-59098D30C9C1}.teste|ARM64.Deploy.0 = teste|ARM64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

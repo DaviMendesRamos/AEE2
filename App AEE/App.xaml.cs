@@ -29,7 +29,7 @@ namespace App_AEE
 		{
 			InitializeComponent();
 
-			MainPage = new LoginUsuarioPage();
+			MainPage = new NavigationPage( new LoginUsuarioPage());
 		}
 	}
 }
