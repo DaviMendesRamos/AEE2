@@ -11,7 +11,9 @@
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent Title="Home"
              ContentTemplate="{DataTemplate pages:HomePrincipalPage }"
-             Route="home"/>
+             Route="home"
+             Icon="home.png"
+                      />
         
         <ShellContent Title="Busca"
             ContentTemplate="{DataTemplate pages:BuscaUsuarioPage }"
@@ -23,7 +25,8 @@
 
         <ShellContent Title="Perfil"
             ContentTemplate="{DataTemplate pages:ExibirUsuarioPage }"
-            Route="ExibirUsuario"/>
+            Route="ExibirUsuario"
+            Icon="profile.png"/>
 
     </FlyoutItem>
     

@@ -14,7 +14,7 @@
                 HorizontalTextAlignment="Center" FontAttributes="Bold"
                 FontAutoScalingEnabled="True" FontFamily="arial"/>
         
-        
+         
         
 
     </StackLayout>

@@ -78,9 +78,10 @@
 	  <None Remove="Resources\Fonts\arial.ttf" />
 	  <None Remove="Resources\Images\Home-button.png" />
 	  <None Remove="Resources\Images\home-button_icon-icons.com_72700.svg" />
-	  <None Remove="Resources\Images\home_button.png" />
+	  <None Remove="Resources\Images\home.png" />
 	  <None Remove="Resources\Images\logo_if.png" />
 	  <None Remove="Resources\Images\pngwing.com.png" />
+	  <None Remove="Resources\Images\profile.png" />
 	</ItemGroup>
 
 	<ItemGroup>
