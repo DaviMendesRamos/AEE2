@@ -76,12 +76,16 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Fonts\arial.ttf" />
+	  <None Remove="Resources\Images\amistoso.png" />
+	  <None Remove="Resources\Images\equipe.png" />
 	  <None Remove="Resources\Images\Home-button.png" />
 	  <None Remove="Resources\Images\home-button_icon-icons.com_72700.svg" />
 	  <None Remove="Resources\Images\home.png" />
+	  <None Remove="Resources\Images\inscrever.png" />
 	  <None Remove="Resources\Images\logo_if.png" />
 	  <None Remove="Resources\Images\pngwing.com.png" />
 	  <None Remove="Resources\Images\profile.png" />
+	  <None Remove="Resources\Images\verEvento.png" />
 	</ItemGroup>
 
 	<ItemGroup>

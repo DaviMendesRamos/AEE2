@@ -6,17 +6,98 @@
              x:Class="App_AEE.Pages.HomePrincipalPage"
              Title="HomePrincipalPage"
              NavigationPage.HasNavigationBar="False"
-               Shell.NavBarIsVisible="False">
+               Shell.NavBarIsVisible="False"
+             BackgroundColor="#1c1c1c">
 
-    <StackLayout>
+    <ContentPage.Content>
+        <Grid RowDefinitions="*, *" ColumnDefinitions="*, *" Padding="20">
 
-         <Label Text="Pagina Principal" FontSize="Large"
-                HorizontalTextAlignment="Center" FontAttributes="Bold"
-                FontAutoScalingEnabled="True" FontFamily="arial"/>
-        
-         
-        
+            <!-- Cartão 1 - Equipe -->
+            <Frame Grid.Row="0" Grid.Column="0"
+                   BackgroundColor="#2f2f2f"
+                   CornerRadius="10"
+                   BorderColor="Gray"
+                   HasShadow="True"
+                   Padding="10"
+                   Margin="10">
+                <StackLayout VerticalOptions="Center">
+                    <!-- Ícone ou imagem -->
+                    <Image Source="equipe.png" HeightRequest="75"  />
+                    <!-- Texto do botão -->
+                    <Label Text=" Sua Equipe"
+                           FontFamily="Arial"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="White"
+                         />
+                </StackLayout>
+            </Frame>
 
-    </StackLayout>
+            <!-- Cartão 2 - Amigos -->
+            <Frame Grid.Row="0" Grid.Column="1"
+                   BackgroundColor="#2f2f2f"
+                   CornerRadius="10"
+                   BorderColor="Gray"
+                   HasShadow="True"
+                   Padding="10"
+                   Margin="10">
+                <StackLayout VerticalOptions="Center">
+                    <!-- Ícone ou imagem -->
+                    <Image Source="amistoso.png" HeightRequest="75" />
+                    <!-- Texto do botão -->
+                    <Label Text="Amistosos"
+                           FontFamily="Arial"
+                           FontSize="16"
+                           TextColor="White"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Cartão 3 - Inscrever em Evento -->
+            <Frame Grid.Row="1" Grid.Column="0"
+                   BackgroundColor="#2f2f2f"
+                   CornerRadius="10"
+                   BorderColor="Gray"
+                   HasShadow="True"
+                   Padding="10"
+                   Margin="10">
+                <StackLayout VerticalOptions="Center">
+                    <!-- Ícone ou imagem -->
+                    <Image Source="inscrever.png" HeightRequest="75" />
+                    <!-- Texto do botão -->
+                    <Label Text="INSCR. EVENTO"
+                           FontFamily="Arial"
+                           FontSize="16"
+                           TextColor="White"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Cartão 4 - Ver Eventos -->
+            <Frame Grid.Row="1" Grid.Column="1"
+                   BackgroundColor="#2f2f2f"
+                   CornerRadius="10"
+                   BorderColor="Gray"
+                   HasShadow="True"
+                   Padding="10"
+                   Margin="10">
+                <StackLayout VerticalOptions="Center">
+                    <!-- Ícone ou imagem -->
+                    <Image Source="verevento.png" HeightRequest="75" />
+                    <!-- Texto do botão -->
+                    <Label Text="VER EVENTOS"
+                           FontFamily="Arial"
+                           FontSize="16"
+                           TextColor="White"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </Frame>
+
+        </Grid>
+    </ContentPage.Content>
 
 </ContentPage>

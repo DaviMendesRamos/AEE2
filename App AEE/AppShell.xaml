@@ -6,6 +6,10 @@
     xmlns:local="clr-namespace:App_AEE"
     xmlns:pages="clr-namespace:App_AEE.Pages"
     Shell.FlyoutBehavior="Disabled"
+    Shell.TabBarBackgroundColor="DarkGreen"
+    Shell.TabBarTitleColor="black"
+    Shell.UnselectedColor="White"
+    Shell.ForegroundColor="White"
     Title="App_AEE">
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
@@ -29,6 +33,6 @@
             Icon="profile.png"/>
 
     </FlyoutItem>
-    
+  
 
 </Shell>
