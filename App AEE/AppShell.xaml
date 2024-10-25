@@ -13,21 +13,18 @@
     Title="App_AEE">
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent Title="Home"
+        <ShellContent Title="HOME"
              ContentTemplate="{DataTemplate pages:HomePrincipalPage }"
              Route="home"
-             Icon="home.png"
-                      />
+             Icon="home.png"/>
         
-        <ShellContent Title="Busca"
-            ContentTemplate="{DataTemplate pages:BuscaUsuarioPage }"
-            Route="BuscaUSuarioPage"/>
+        <ShellContent Title="EQUIPES"
+            ContentTemplate="{DataTemplate pages:EquipesPage }"
+            Route="EquipesPage"
+            Icon="equipe.png"/>
         
-        <ShellContent Title="Lista"
-            ContentTemplate="{DataTemplate pages:ListaFeedPage }"
-            Route="ListaFeedPage"/>
 
-        <ShellContent Title="Perfil"
+        <ShellContent Title="PERFIL"
             ContentTemplate="{DataTemplate pages:ExibirUsuarioPage }"
             Route="ExibirUsuario"
             Icon="profile.png"/>

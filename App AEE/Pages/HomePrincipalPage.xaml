@@ -24,7 +24,7 @@
                     <!-- Ícone ou imagem -->
                     <Image Source="equipe.png" HeightRequest="75"  />
                     <!-- Texto do botão -->
-                    <Label Text=" Sua Equipe"
+                    <Label Text="SUA EQUIPE"
                            FontFamily="Arial"
                            FontSize="16"
                            FontAttributes="Bold"
@@ -46,7 +46,7 @@
                     <!-- Ícone ou imagem -->
                     <Image Source="amistoso.png" HeightRequest="75" />
                     <!-- Texto do botão -->
-                    <Label Text="Amistosos"
+                    <Label Text="AMISTOSOS"
                            FontFamily="Arial"
                            FontSize="16"
                            TextColor="White"
