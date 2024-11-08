@@ -9,5 +9,10 @@ public partial class HomePrincipalPage : ContentPage
 	{
 		InitializeComponent();
 
+
 	}
+    private async void OnInscreverEventoTapped(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new InscricaoEventoPage());
+    }
 }

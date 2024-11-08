@@ -63,6 +63,9 @@
                    HasShadow="True"
                    Padding="10"
                    Margin="10">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnInscreverEventoTapped" />
+                </Frame.GestureRecognizers>
                 <StackLayout VerticalOptions="Center">
                     <!-- Ícone ou imagem -->
                     <Image Source="inscrever.png" HeightRequest="75" />
