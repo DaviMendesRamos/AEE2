@@ -17,7 +17,7 @@ public partial class InscricaoEventoPage : ContentPage
                 new Evento { Nome = "Interclasse", Data = "15/11/2024", Imagem = "interclasse.png" },
                 new Evento { Nome = "Jemupi", Data = "25/10/2024", Imagem = "jemupi.png" },
 
-            };
+            };  
         InscreverCommand = new Command<Evento>(OnInscrever);
         BindingContext = this;
     }

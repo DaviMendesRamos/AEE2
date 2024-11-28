@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="App_AEE.Pages.RegistroUsuarioPage"
+             Title="RegistroUsuarioPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="White">
+
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <toolkit:DockLayout>
+            <!-- Cabeçalho -->
+            <Grid toolkit:DockLayout.DockPosition="Top" HeightRequest="200" BackgroundColor="White" Margin="10">
+                <Image Source="logo_if.png"
+                       WidthRequest="300"
+                       VerticalOptions="CenterAndExpand"
+                       HorizontalOptions="CenterAndExpand"></Image>
+            </Grid>
+
+            <!-- Rodapé -->
+            <Grid toolkit:DockLayout.DockPosition="Bottom" HeightRequest="50" BackgroundColor="DarkGreen">
+                <Label Text="IFRJ ©" 
+                       HorizontalOptions="CenterAndExpand" 
+                       VerticalOptions="CenterAndExpand" 
+                       TextColor="White"></Label>
+            </Grid>
+
+            <!-- Conteúdo Central -->
+            <Grid x:Name="CenterGrid" BackgroundColor="White">
+                <VerticalStackLayout VerticalOptions="CenterAndExpand" Spacing="20" Margin="20">
+                    <Label Text="Digite seu Nome:" />
+                    <Entry Placeholder="Nome" x:Name="txtNome" />
+
+                    <Label Text="Digite seu Email:" />
+                    <Entry Placeholder="Email" x:Name="txtEmail" Keyboard="Email" />
+
+                    <Label Text="Digite seu Telefone:" />
+                    <Entry Placeholder="Telefone" x:Name="txtTelefone" Keyboard="Telephone" />
+
+                    <Label Text="Digite sua Senha:" />
+                    <Entry Placeholder="Senha" x:Name="txtSenha" IsPassword="True" />
+
+                    <Label Text="Confirme sua Senha:" />
+                    <Entry Placeholder="Confirmar Senha" x:Name="txtConfirmarSenha" IsPassword="True" />
+
+                    <Button Text="Registrar" 
+                            BackgroundColor="Black" 
+                            TextColor="White" 
+                            x:Name="btnRegistrar" 
+                            Clicked="btnRegistrar_Clicked" />
+                </VerticalStackLayout>
+            </Grid>
+        </toolkit:DockLayout>
+    </ScrollView>
+
+</ContentPage>

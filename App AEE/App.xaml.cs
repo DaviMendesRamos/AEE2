@@ -1,35 +1,34 @@
-﻿using App_AEE.Data;
-using App_AEE.Model;
+﻿
+using App_AEE.Services;
 using App_AEE.Pages;
-using System.Runtime.CompilerServices;
+using App_AEE.Validations;
 
-namespace App_AEE
+namespace App_AEE;
+
+public partial class App : Application
 {
-	public partial class App : Application
-	{
-		static SQLiteData _bancoDados;
+    private readonly ApiService _apiService;
+    private readonly IValidator _validator;
 
-		public static SQLiteData BancoDados
-		{
-			get
-			{
-				if (_bancoDados == null)
-				{
-					_bancoDados =
-						new SQLiteData(Path.Combine(Environment.
-						GetFolderPath(Environment.SpecialFolder.
-						LocalApplicationData), "Dados.db3"));
-				}
-				return _bancoDados;
-			}
-		}
+    public App(ApiService apiService, IValidator validator)
+    {
+        InitializeComponent();
+        _apiService = apiService;
+        _validator = validator;
 
-		public static Usuario Usuario { get; set; }
-		public App()
-		{
-			InitializeComponent();
+        SetMainPage();
+    }
+    private void SetMainPage()
+    {
+        var accessToken = Preferences.Get("accesstoken", string.Empty);
 
-			MainPage = new NavigationPage( new LoginUsuarioPage());
-		}
-	}
+        if (string.IsNullOrEmpty(accessToken))
+        {
+            MainPage = new NavigationPage(new LoginUsuarioPage(_apiService, _validator));
+            return;
+        }
+
+        MainPage = new HomePrincipalPage();
+    }
+
 }

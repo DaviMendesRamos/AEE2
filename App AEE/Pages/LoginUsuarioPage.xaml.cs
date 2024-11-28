@@ -1,39 +1,53 @@
 namespace App_AEE.Pages;
+using App_AEE.Services;
+using App_AEE.Validations;
+
 
 public partial class LoginUsuarioPage : ContentPage
 {
-	public LoginUsuarioPage()
-	{
-		InitializeComponent();
-	}
+   
+        private readonly ApiService _apiService;
+        private readonly IValidator _validator;
 
-	private void btnRegistrar_Clicked(object sender, EventArgs e)
-	{
-		Navigation.PushAsync(new EditaUsuarioPage());
-	}
+        public LoginUsuarioPage(ApiService apiService, IValidator validator)
+        {
+            InitializeComponent();
+            _apiService = apiService;
+            _validator = validator;
+        }
 
-	private async void btnEntrar_Clicked(object sender, EventArgs e)
-	{
-		string email = txtEmail.Text; 
-		string senha = txtSenha.Text;
+        private async void btnEntrar_Clicked(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtEmail.Text))
+            {
+                await DisplayAlert("Erro", "Informe o email", "Cancelar");
+                return;
+            }
 
-		if (!string.IsNullOrWhiteSpace(email) &&
-			!string.IsNullOrWhiteSpace(senha)) ;
-		{
-			var usuario = await App.BancoDados.UsuarioDataTable.ObtemUsuario(email, senha);
+            if (string.IsNullOrEmpty(txtSenha.Text))
+            {
+                await DisplayAlert("Erro", "Informe a senha", "Cancelar");
+                return;
+            }
 
-			if (usuario == null)
-			{
-				await DisplayAlert("Atenção", "Email ou senha Invalidos", "Fechar");
-				return;
-			}
+            var response = await _apiService.Login(txtEmail.Text, txtSenha.Text);
 
-			App.Usuario = usuario;
+            if (!response.HasError)
+            {
+                Application.Current!.MainPage = new AppShell(_apiService, _validator);
+            }
+            else
+            {
+                await DisplayAlert("Erro", "Algo deu errado", "Cancelar");
+            }
 
-			Application.Current.MainPage = new AppShell();
+        }
 
-			await Shell.Current.GoToAsync("//home");
-		}
+        private async void TapRegister_Tapped(object sender, TappedEventArgs e)
+        {
 
-	}
+            await Navigation.PushAsync(new RegistroUsuarioPage(_apiService, _validator));
+
+        }
+    
 }

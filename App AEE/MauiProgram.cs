@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Core;
 using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
+using App_AEE.Services;
 
 namespace App_AEE
 {
@@ -17,7 +18,10 @@ namespace App_AEE
             }).UseMauiCommunityToolkit();
 #if DEBUG
             builder.Logging.AddDebug();
-#endif
+#endif 
+            builder.Services.AddHttpClient();
+            builder.Services.AddSingleton<ApiService>();
+
             return builder.Build();
         }
     }
