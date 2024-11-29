@@ -1,6 +1,7 @@
-namespace App_AEE.Pages;
 using App_AEE.Services;
 using App_AEE.Validations;
+namespace App_AEE.Pages;
+
 
 
 public partial class LoginUsuarioPage : ContentPage
@@ -43,11 +44,13 @@ public partial class LoginUsuarioPage : ContentPage
 
         }
 
-        private async void TapRegister_Tapped(object sender, TappedEventArgs e)
+	private async void btnRegistrar_Clicked(object sender, EventArgs e)
         {
 
             await Navigation.PushAsync(new RegistroUsuarioPage(_apiService, _validator));
 
         }
+
+    
     
 }

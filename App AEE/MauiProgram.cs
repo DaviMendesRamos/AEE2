@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
 using App_AEE.Services;
+using App_AEE.Pages;
+using App_AEE.Validations;
 
 namespace App_AEE
 {
@@ -21,8 +23,10 @@ namespace App_AEE
 #endif 
             builder.Services.AddHttpClient();
             builder.Services.AddSingleton<ApiService>();
+			builder.Services.AddSingleton<IValidator,Validator>();
+			builder.Services.AddTransient<LoginUsuarioPage>();
 
-            return builder.Build();
+			return builder.Build();
         }
     }
 }

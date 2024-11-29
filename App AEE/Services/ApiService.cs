@@ -6,112 +6,120 @@ using System.Text.Json;
 
 namespace App_AEE.Services
 {
-    public class ApiService
-    {
-        private readonly HttpClient _httpClient;
-        private readonly ILogger<ApiService> _logger;
+	public class ApiService
+	{
+		private readonly HttpClient _httpClient;
+		private readonly ILogger<ApiService> _logger;
 
-        private const string BaseUrl = "http://192.168.35.107:5284/";
-        private readonly JsonSerializerOptions _serializerOptions;
+		private const string BaseUrl = "https://192.168.1.6:7066/"; // Certifique-se de usar a URL correta
+		private readonly JsonSerializerOptions _serializerOptions;
 
-        public ApiService(HttpClient httpClient, ILogger<ApiService> logger)
-        {
-            _httpClient = httpClient;
-            _logger = logger;
-            _serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-        }
+		public ApiService(HttpClient httpClient, ILogger<ApiService> logger)
+		{
+			// Configuração para ignorar erros de certificado SSL (em um ambiente de desenvolvimento)
+			var handler = new HttpClientHandler
+			{
+				// Ignora erros de certificado SSL
+				ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+			};
 
-        public async Task<ApiResponse<bool>> RegistrarUsuario(string nome, string email, string telefone, string password)
-        {
-            try
-            {
-                var register = new Register
-                {
-                    Nome = nome,
-                    Email = email,
-                    Telefone = telefone,
-                    Senha = password
-                };
+			// Criando o HttpClient com o handler configurado
+			_httpClient = new HttpClient(handler);
+			_logger = logger;
+			_serializerOptions = new JsonSerializerOptions
+			{
+				PropertyNameCaseInsensitive = true
+			};
+		}
 
-                var json = JsonSerializer.Serialize(register, _serializerOptions);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+		public async Task<ApiResponse<bool>> RegistrarUsuario(string nome, string email, string telefone, string password)
+		{
+			try
+			{
+				var register = new Register
+				{
+					Nome = nome,
+					Email = email,
+					Telefone = telefone,
+					Senha = password
+				};
 
-                var response = await PostRequest("api/Usuarios/Register", content);
+				var json = JsonSerializer.Serialize(register, _serializerOptions);
+				var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
-                    return new ApiResponse<bool>
-                    {
-                        ErrorMessage = $"Erro ao enviar requisição HTTP: {response.StatusCode}"
-                    };
-                }
+				var response = await PostRequest("api/Usuarios/Register", content);
 
-                return new ApiResponse<bool> { Data = true };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Erro ao registrar o usuário: {ex.Message}");
-                return new ApiResponse<bool> { ErrorMessage = ex.Message };
-            }
-        }
+				if (!response.IsSuccessStatusCode)
+				{
+					_logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
+					return new ApiResponse<bool>
+					{
+						ErrorMessage = $"Erro ao enviar requisição HTTP: {response.StatusCode}"
+					};
+				}
 
-        public async Task<ApiResponse<bool>> Login(string email, string password)
-        {
-            try
-            {
-                var login = new Login
-                {
-                    Email = email,
-                    Senha = password
-                };
+				return new ApiResponse<bool> { Data = true };
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Erro ao registrar o usuário: {ex.Message}");
+				return new ApiResponse<bool> { ErrorMessage = ex.Message };
+			}
+		}
 
-                var json = JsonSerializer.Serialize(login, _serializerOptions);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+		public async Task<ApiResponse<bool>> Login(string email, string password)
+		{
+			try
+			{
+				var login = new Login
+				{
+					Email = email,
+					Senha = password
+				};
 
-                var response = await PostRequest("api/Usuarios/Login", content);
+				var json = JsonSerializer.Serialize(login, _serializerOptions);
+				var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
-                    return new ApiResponse<bool>
-                    {
-                        ErrorMessage = $"Erro ao enviar requisição HTTP: {response.StatusCode}"
-                    };
-                }
+				var response = await PostRequest("api/Usuarios/Login", content);
 
-                var jsonResult = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<Token>(jsonResult, _serializerOptions);
+				if (!response.IsSuccessStatusCode)
+				{
+					_logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
+					return new ApiResponse<bool>
+					{
+						ErrorMessage = $"Erro ao enviar requisição HTTP: {response.StatusCode}"
+					};
+				}
 
-                Preferences.Set("accesstoken", result!.AccessToken);
-                Preferences.Set("usuarioid", (int)result.UsuarioId!);
-                Preferences.Set("usuarionome", result.UsuarioNome);
+				var jsonResult = await response.Content.ReadAsStringAsync();
+				var result = JsonSerializer.Deserialize<Token>(jsonResult, _serializerOptions);
 
-                return new ApiResponse<bool> { Data = true };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Erro no login: {ex.Message}");
-                return new ApiResponse<bool> { ErrorMessage = ex.Message };
-            }
-        }
+				Preferences.Set("accesstoken", result!.AccessToken);
+				Preferences.Set("usuarioid", (int)result.UsuarioId!);
+				Preferences.Set("usuarionome", result.UsuarioNome);
 
-        private async Task<HttpResponseMessage> PostRequest(string uri, HttpContent content)
-        {
-            var enderecoUrl = BaseUrl + uri;
-            try
-            {
-                var result = await _httpClient.PostAsync(enderecoUrl, content);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Erro ao enviar requisição POST para {uri}: {ex.Message}");
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
-        }
-    }
+				return new ApiResponse<bool> { Data = true };
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Erro no login: {ex.Message}");
+				return new ApiResponse<bool> { ErrorMessage = ex.Message };
+			}
+		}
+
+		private async Task<HttpResponseMessage> PostRequest(string uri, HttpContent content)
+		{
+			var enderecoUrl = BaseUrl + uri;
+			try
+			{
+				var result = await _httpClient.PostAsync(enderecoUrl, content);
+				return result;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Erro ao enviar requisição POST para {uri}: {ex.Message}");
+				return new HttpResponseMessage(HttpStatusCode.BadRequest);
+			}
+		}
+	}
 }

@@ -100,6 +100,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\ErrorPage.xaml.cs">
+	    <DependentUpon>ErrorPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\RegistroUsuarioPage.xaml.cs">
 	    <DependentUpon>RegistroUsuarioPage.xaml</DependentUpon>
 	  </Compile>
@@ -107,6 +110,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Pages\BuscaUsuarioPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\ErrorPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\RegistroUsuarioPage.xaml">
