@@ -1,6 +1,6 @@
 ﻿using App_AEE.Model;
 using Microsoft.Extensions.Logging;
-using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -10,21 +10,11 @@ namespace App_AEE.Services
 	{
 		private readonly HttpClient _httpClient;
 		private readonly ILogger<ApiService> _logger;
-
-		private const string BaseUrl = "https://192.168.1.6:7066/"; // Certifique-se de usar a URL correta
 		private readonly JsonSerializerOptions _serializerOptions;
 
 		public ApiService(HttpClient httpClient, ILogger<ApiService> logger)
 		{
-			// Configuração para ignorar erros de certificado SSL (em um ambiente de desenvolvimento)
-			var handler = new HttpClientHandler
-			{
-				// Ignora erros de certificado SSL
-				ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-			};
-
-			// Criando o HttpClient com o handler configurado
-			_httpClient = new HttpClient(handler);
+			_httpClient = httpClient;
 			_logger = logger;
 			_serializerOptions = new JsonSerializerOptions
 			{
@@ -32,11 +22,12 @@ namespace App_AEE.Services
 			};
 		}
 
+		// Método para registrar o usuário
 		public async Task<ApiResponse<bool>> RegistrarUsuario(string nome, string email, string telefone, string password)
 		{
 			try
 			{
-				var register = new Register
+				var register = new Register()
 				{
 					Nome = nome,
 					Email = email,
@@ -47,7 +38,11 @@ namespace App_AEE.Services
 				var json = JsonSerializer.Serialize(register, _serializerOptions);
 				var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-				var response = await PostRequest("api/Usuarios/Register", content);
+				
+				var fullUrl = "http://10.0.2.2:5053/api/Usuarios/Register";
+
+				// Enviando a requisição com a URL completa
+				var response = await PostRequest(fullUrl, content);
 
 				if (!response.IsSuccessStatusCode)
 				{
@@ -57,7 +52,8 @@ namespace App_AEE.Services
 						ErrorMessage = $"Erro ao enviar requisição HTTP: {response.StatusCode}"
 					};
 				}
-
+				
+				
 				return new ApiResponse<bool> { Data = true };
 			}
 			catch (Exception ex)
@@ -67,11 +63,13 @@ namespace App_AEE.Services
 			}
 		}
 
+
+		// Método para fazer login
 		public async Task<ApiResponse<bool>> Login(string email, string password)
 		{
 			try
 			{
-				var login = new Login
+				var login = new Login()
 				{
 					Email = email,
 					Senha = password
@@ -80,8 +78,7 @@ namespace App_AEE.Services
 				var json = JsonSerializer.Serialize(login, _serializerOptions);
 				var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-				var response = await PostRequest("api/Usuarios/Login", content);
-
+				var response = await PostRequest("http://10.0.2.2:5053/api/Usuarios/Login", content);
 				if (!response.IsSuccessStatusCode)
 				{
 					_logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
@@ -92,13 +89,9 @@ namespace App_AEE.Services
 				}
 
 				var jsonResult = await response.Content.ReadAsStringAsync();
-				var result = JsonSerializer.Deserialize<Token>(jsonResult, _serializerOptions);
+				var result = JsonSerializer.Deserialize<bool>(jsonResult, _serializerOptions);
 
-				Preferences.Set("accesstoken", result!.AccessToken);
-				Preferences.Set("usuarioid", (int)result.UsuarioId!);
-				Preferences.Set("usuarionome", result.UsuarioNome);
-
-				return new ApiResponse<bool> { Data = true };
+				return new ApiResponse<bool> { Data = result };
 			}
 			catch (Exception ex)
 			{
@@ -107,9 +100,37 @@ namespace App_AEE.Services
 			}
 		}
 
+		// Método para fazer upload da foto do usuário
+		public async Task<ApiResponse<bool>> UploadImagemUsuario(byte[] imageArray)
+		{
+			try
+			{
+				var content = new MultipartFormDataContent();
+				content.Add(new ByteArrayContent(imageArray), "imagem", "image.jpg");
+				var response = await PostRequest("api/Usuarios/uploadfotousuario", content);
+
+				if (!response.IsSuccessStatusCode)
+				{
+					_logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
+					return new ApiResponse<bool> { ErrorMessage = $"Erro ao enviar requisição HTTP: {response.StatusCode}" };
+				}
+
+				return new ApiResponse<bool> { Data = true };
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Erro ao fazer upload da imagem do usuário: {ex.Message}");
+				return new ApiResponse<bool> { ErrorMessage = ex.Message };
+			}
+		}
+
+		// Método para obter a imagem de perfil do usuário
+		
+
+		// Método auxiliar para requisição POST
 		private async Task<HttpResponseMessage> PostRequest(string uri, HttpContent content)
 		{
-			var enderecoUrl = BaseUrl + uri;
+			var enderecoUrl = AppConfig.BaseUrl + uri;
 			try
 			{
 				var result = await _httpClient.PostAsync(enderecoUrl, content);
@@ -118,7 +139,23 @@ namespace App_AEE.Services
 			catch (Exception ex)
 			{
 				_logger.LogError($"Erro ao enviar requisição POST para {uri}: {ex.Message}");
-				return new HttpResponseMessage(HttpStatusCode.BadRequest);
+				return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+			}
+		}
+
+		// Método auxiliar para requisição GET
+		private async Task<HttpResponseMessage> GetAsync(string uri)
+		{
+			var enderecoUrl = AppConfig.BaseUrl + uri;
+			try
+			{
+				var result = await _httpClient.GetAsync(enderecoUrl);
+				return result;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Erro ao enviar requisição GET para {uri}: {ex.Message}");
+				return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
 			}
 		}
 	}

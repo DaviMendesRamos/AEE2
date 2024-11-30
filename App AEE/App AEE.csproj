@@ -59,6 +59,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Data\**" />
+	  <Compile Remove="Data\**" />
+	  <EmbeddedResource Remove="Data\**" />
+	  <MauiCss Remove="Data\**" />
+	  <MauiXaml Remove="Data\**" />
+	  <None Remove="Data\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Remove="Pages\NewPage1.xaml.cs" />
 	  <Compile Remove="Pages\PaginaInicial.xaml.cs" />
 	</ItemGroup>
