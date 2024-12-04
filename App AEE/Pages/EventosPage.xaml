@@ -1,0 +1,35 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_AEE.Pages.EventosPage">
+
+    <StackLayout Padding="10">
+
+        <!-- Campos do Evento -->
+        <Entry x:Name="txtNomeEvento" Placeholder="Nome do Evento" />
+        <DatePicker x:Name="datePickerDataEvento" />
+        <Entry x:Name="txtLocalEvento" Placeholder="Local do Evento" />
+        <Entry x:Name="txtDescricaoEvento" Placeholder="Descrição do Evento" />
+
+        <!-- Botões -->
+        <Button Text="Criar Evento" Clicked="btnCriarEvento_Clicked"/>
+        <Button Text="Listar Eventos" Clicked="btnListarEventos_Clicked"/>
+
+        <!-- Exibição dos Eventos -->
+        <CollectionView x:Name="eventosCollectionView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="Gray" Padding="10">
+                        <StackLayout>
+                            <Label Text="{Binding Nome}" FontSize="18" />
+                            <Label Text="{Binding Local}" />
+                            <Label Text="{Binding Data}" />
+                            <Label Text="{Binding Descricao}" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </StackLayout>
+
+</ContentPage>

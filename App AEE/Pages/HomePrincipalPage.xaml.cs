@@ -13,6 +13,6 @@ public partial class HomePrincipalPage : ContentPage
 	}
     private async void OnInscreverEventoTapped(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new InscricaoEventoPage());
+        await Navigation.PushAsync(new EventosPage());
     }
 }

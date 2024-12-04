@@ -1,162 +1,157 @@
-﻿using App_AEE.Model;
-using Microsoft.Extensions.Logging;
-using System.Net.Http.Headers;
-using System.Text;
+﻿using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using App_AEE.Services;
+using App_AEE.Model;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
-namespace App_AEE.Services
+
+public class ApiService
 {
-	public class ApiService
-	{
-		private readonly HttpClient _httpClient;
-		private readonly ILogger<ApiService> _logger;
-		private readonly JsonSerializerOptions _serializerOptions;
+    private readonly HttpClient _httpClient;
+    private readonly ILogger<ApiService> _logger;
+    private readonly JsonSerializerOptions _serializerOptions;
 
-		public ApiService(HttpClient httpClient, ILogger<ApiService> logger)
-		{
-			_httpClient = httpClient;
-			_logger = logger;
-			_serializerOptions = new JsonSerializerOptions
-			{
-				PropertyNameCaseInsensitive = true
-			};
-		}
+    public ApiService(HttpClient httpClient, ILogger<ApiService> logger)
+    {
+        _httpClient = httpClient;
+        _logger = logger;
+        _serializerOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+    }
 
-		// Método para registrar o usuário
-		public async Task<ApiResponse<bool>> RegistrarUsuario(string nome, string email, string telefone, string password)
-		{
-			try
-			{
-				var register = new Register()
-				{
-					Nome = nome,
-					Email = email,
-					Telefone = telefone,
-					Senha = password
-				};
+    public async Task<bool> IsApiDisponivel()
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync("api/status");
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Erro ao verificar disponibilidade da API: {ex.Message}");
+            return false;
+        }
+    }
 
-				var json = JsonSerializer.Serialize(register, _serializerOptions);
-				var content = new StringContent(json, Encoding.UTF8, "application/json");
+    // Método de registro
+    public async Task<ApiResponse<bool>> RegistrarUsuario(string nome, string email, string telefone, string password)
+    {
+        try
+        {
+            var register = new Register
+            {
+                Nome = nome,
+                Email = email,
+                Telefone = telefone,
+                Senha = password
+            };
 
-				
-				var fullUrl = "http://10.0.2.2:5053/api/Usuarios/Register";
+            var content = new StringContent(JsonSerializer.Serialize(register, _serializerOptions), Encoding.UTF8, "application/json");
+            var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/Register", content);
 
-				// Enviando a requisição com a URL completa
-				var response = await PostRequest(fullUrl, content);
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Erro no registro: {response.StatusCode} - {errorMessage}");
+                return new ApiResponse<bool> { ErrorMessage = errorMessage };
+            }
 
-				if (!response.IsSuccessStatusCode)
-				{
-					_logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
-					return new ApiResponse<bool>
-					{
-						ErrorMessage = $"Erro ao enviar requisição HTTP: {response.StatusCode}"
-					};
-				}
-				
-				
-				return new ApiResponse<bool> { Data = true };
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError($"Erro ao registrar o usuário: {ex.Message}");
-				return new ApiResponse<bool> { ErrorMessage = ex.Message };
-			}
-		}
+            return new ApiResponse<bool> { Data = true };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Erro ao registrar o usuário: {ex.Message}");
+            return new ApiResponse<bool> { ErrorMessage = ex.Message };
+        }
+    }
 
+    // Método de login
+    public async Task<ApiResponse<bool>> Login(string email, string password)
+    {
+        try
+        {
+            var login = new Login
+            {
+                Email = email,
+                Senha = password
+            };
 
-		// Método para fazer login
-		public async Task<ApiResponse<bool>> Login(string email, string password)
-		{
-			try
-			{
-				var login = new Login()
-				{
-					Email = email,
-					Senha = password
-				};
+            var content = new StringContent(JsonSerializer.Serialize(login, _serializerOptions), Encoding.UTF8, "application/json");
+            var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/Login", content);
 
-				var json = JsonSerializer.Serialize(login, _serializerOptions);
-				var content = new StringContent(json, Encoding.UTF8, "application/json");
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Erro no login: {response.StatusCode} - {errorMessage}");
+                return new ApiResponse<bool> { ErrorMessage = errorMessage };
+            }
 
-				var response = await PostRequest("http://10.0.2.2:5053/api/Usuarios/Login", content);
-				if (!response.IsSuccessStatusCode)
-				{
-					_logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
-					return new ApiResponse<bool>
-					{
-						ErrorMessage = $"Erro ao enviar requisição HTTP: {response.StatusCode}"
-					};
-				}
+            var jsonResult = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<Token>(jsonResult, _serializerOptions);
 
-				var jsonResult = await response.Content.ReadAsStringAsync();
-				var result = JsonSerializer.Deserialize<bool>(jsonResult, _serializerOptions);
+            // Armazena o token JWT nas preferências
+            Preferences.Set("accesstoken", result!.AccessToken);
+            Preferences.Set("usuarioid", result.UsuarioId ?? 0);
+            Preferences.Set("usuarionome", result.UsuarioNome);
 
-				return new ApiResponse<bool> { Data = result };
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError($"Erro no login: {ex.Message}");
-				return new ApiResponse<bool> { ErrorMessage = ex.Message };
-			}
-		}
+            // Valida o JWT (Opcional, você pode usar esta validação em todas as requisições)
+            if (!IsTokenValid(result.AccessToken))
+            {
+                return new ApiResponse<bool> { ErrorMessage = "Token inválido" };
+            }
 
-		// Método para fazer upload da foto do usuário
-		public async Task<ApiResponse<bool>> UploadImagemUsuario(byte[] imageArray)
-		{
-			try
-			{
-				var content = new MultipartFormDataContent();
-				content.Add(new ByteArrayContent(imageArray), "imagem", "image.jpg");
-				var response = await PostRequest("api/Usuarios/uploadfotousuario", content);
+            return new ApiResponse<bool> { Data = true };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Erro no login: {ex.Message}");
+            return new ApiResponse<bool> { ErrorMessage = ex.Message };
+        }
+    }
 
-				if (!response.IsSuccessStatusCode)
-				{
-					_logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
-					return new ApiResponse<bool> { ErrorMessage = $"Erro ao enviar requisição HTTP: {response.StatusCode}" };
-				}
+    // Método para verificar se o token JWT é válido
+    private bool IsTokenValid(string token)
+    {
+        try
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("ZdYM000OLlMQG6VVVp1OH7RxtuEfGvBnXarp7gHuw1qvUC5dcGt3SNM"); // Utilize sua chave secreta ou configure-a no appsettings.json
 
-				return new ApiResponse<bool> { Data = true };
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError($"Erro ao fazer upload da imagem do usuário: {ex.Message}");
-				return new ApiResponse<bool> { ErrorMessage = ex.Message };
-			}
-		}
+            // Validação do token
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key)
+            };
 
-		// Método para obter a imagem de perfil do usuário
-		
+            // Valida o token
+            tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+            return true; // Token válido
+        }
+        catch
+        {
+            return false; // Token inválido
+        }
+    }
 
-		// Método auxiliar para requisição POST
-		private async Task<HttpResponseMessage> PostRequest(string uri, HttpContent content)
-		{
-			var enderecoUrl = AppConfig.BaseUrl + uri;
-			try
-			{
-				var result = await _httpClient.PostAsync(enderecoUrl, content);
-				return result;
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError($"Erro ao enviar requisição POST para {uri}: {ex.Message}");
-				return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
-			}
-		}
+    // Enviar requisição POST
+    private async Task<HttpResponseMessage> PostRequest(string endpoint, HttpContent content)
+    {
+        try
+        {
+            return await _httpClient.PostAsync(endpoint, content);
+        }
+        catch (HttpRequestException ex)
+        {
 
-		// Método auxiliar para requisição GET
-		private async Task<HttpResponseMessage> GetAsync(string uri)
-		{
-			var enderecoUrl = AppConfig.BaseUrl + uri;
-			try
-			{
-				var result = await _httpClient.GetAsync(enderecoUrl);
-				return result;
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError($"Erro ao enviar requisição GET para {uri}: {ex.Message}");
-				return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
-			}
-		}
-	}
+            _logger.LogError($"Erro na requisição HTTP para {endpoint}: {ex.Message}");
+            throw new Exception("Não foi possível conectar ao servidor.");
+        }
+    }
 }

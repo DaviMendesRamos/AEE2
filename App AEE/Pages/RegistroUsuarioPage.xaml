@@ -29,19 +29,19 @@
             <Grid x:Name="CenterGrid" BackgroundColor="White">
                 <VerticalStackLayout VerticalOptions="CenterAndExpand" Spacing="20" Margin="20">
                     <Label Text="Digite seu Nome:" />
-                    <Entry Placeholder="Nome" x:Name="txtNome" />
+                    <Entry Placeholder="Nome" x:Name="txtNome" TextColor="Black" />
 
                     <Label Text="Digite seu Email:" />
-                    <Entry Placeholder="Email" x:Name="txtEmail" Keyboard="Email" />
+                    <Entry Placeholder="Email" x:Name="txtEmail" TextColor="Black" Keyboard="Email" />
 
                     <Label Text="Digite seu Telefone:" />
-                    <Entry Placeholder="Telefone" x:Name="txtTelefone" Keyboard="Telephone" />
+                    <Entry Placeholder="Telefone" x:Name="txtTelefone" TextColor="Black" Keyboard="Telephone" />
 
                     <Label Text="Digite sua Senha:" />
-                    <Entry Placeholder="Senha" x:Name="txtSenha" IsPassword="True" />
+                    <Entry Placeholder="Senha" x:Name="txtSenha" TextColor="Black" IsPassword="True" />
 
                     <Label Text="Confirme sua Senha:" />
-                    <Entry Placeholder="Confirmar Senha" x:Name="txtConfirmarSenha" IsPassword="True" />
+                    <Entry Placeholder="Confirmar Senha" x:Name="txtConfirmarSenha" TextColor="Black" IsPassword="True" />
 
                     <Button Text="Registrar" 
                             BackgroundColor="Black" 
