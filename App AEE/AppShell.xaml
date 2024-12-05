@@ -3,7 +3,6 @@
     x:Class="App_AEE.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:App_AEE"
     xmlns:pages="clr-namespace:App_AEE.Pages"
     Shell.FlyoutBehavior="Disabled"
     Shell.TabBarBackgroundColor="DarkGreen"
@@ -14,22 +13,17 @@
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent Title="HOME"
-             ContentTemplate="{DataTemplate pages:HomePrincipalPage }"
              Route="home"
              Icon="home.png"/>
-        
+
         <ShellContent Title="EQUIPES"
             ContentTemplate="{DataTemplate pages:EquipesPage }"
             Route="EquipesPage"
             Icon="equipe.png"/>
-        
 
         <ShellContent Title="PERFIL"
             ContentTemplate="{DataTemplate pages:ExibirUsuarioPage }"
             Route="ExibirUsuario"
             Icon="profile.png"/>
-
     </FlyoutItem>
-  
-
 </Shell>

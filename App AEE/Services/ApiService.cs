@@ -82,9 +82,11 @@ public class ApiService
                 Senha = password
             };
 
+            // Serializa os dados de login e define o content-type como JSON
             var content = new StringContent(JsonSerializer.Serialize(login, _serializerOptions), Encoding.UTF8, "application/json");
             var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/Login", content);
 
+            // Verifica se a resposta é bem-sucedida
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
@@ -92,20 +94,29 @@ public class ApiService
                 return new ApiResponse<bool> { ErrorMessage = errorMessage };
             }
 
+            // Desserializa a resposta para o objeto Token
             var jsonResult = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<Token>(jsonResult, _serializerOptions);
 
-            // Armazena o token JWT nas preferências
-            Preferences.Set("accesstoken", result!.AccessToken);
+            if (result == null)
+            {
+                return new ApiResponse<bool> { ErrorMessage = "Resposta inválida da API." };
+            }
+
+            // Armazena os dados importantes do token nas preferências
+            Preferences.Set("accesstoken", result.AccessToken);
             Preferences.Set("usuarioid", result.UsuarioId ?? 0);
             Preferences.Set("usuarionome", result.UsuarioNome);
+            Preferences.Set("role", result.Role); // Adiciona o papel do usuário (admin/user)
 
-            // Valida o JWT (Opcional, você pode usar esta validação em todas as requisições)
+            // Validação opcional do token JWT
             if (!IsTokenValid(result.AccessToken))
             {
                 return new ApiResponse<bool> { ErrorMessage = "Token inválido" };
             }
 
+            // Retorna sucesso com base na role
+            _logger.LogInformation($"Usuário logado com role: {result.Role}");
             return new ApiResponse<bool> { Data = true };
         }
         catch (Exception ex)
@@ -114,6 +125,7 @@ public class ApiService
             return new ApiResponse<bool> { ErrorMessage = ex.Message };
         }
     }
+
 
     // Método para verificar se o token JWT é válido
     private bool IsTokenValid(string token)
