@@ -3,16 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_AEE.Pages.ExibirUsuarioPage"
              Title="ExibirUsuarioPage"
-               Shell.NavBarIsVisible="False">
-    <VerticalStackLayout>
-        <Label 
-            Text="Seu Perfil"
-             FontSize="Large"
-                HorizontalTextAlignment="Center" FontAttributes="Bold"
-                FontAutoScalingEnabled="True" FontFamily="arial"/>
+             Shell.NavBarIsVisible="False">
+    <VerticalStackLayout Padding="20">
+        <Label Text="Seu Perfil"
+               FontSize="Large"
+               HorizontalTextAlignment="Center"
+               FontAttributes="Bold"
+               FontAutoScalingEnabled="True"
+               FontFamily="arial"/>
 
-        <Button Text="Deslogar" x:Name="btndeslogar" Clicked="btndeslogar_Clicked"  />
+        <!-- Exibição dos dados do usuário -->
+        <Label x:Name="lblNome" FontSize="Medium" />
+        <Label x:Name="lblEmail" FontSize="Medium" />
+        <Label x:Name="lblTelefone" FontSize="Medium" />
 
-        <Label/>
+        <!-- Botão para editar dados -->
+        <Button Text="Editar Dados" Clicked="OnEditarClicked"/>
+
+        <!-- Botão para deslogar -->
+        <Button Text="Deslogar" x:Name="btndeslogar" Clicked="btndeslogar_Clicked" />
     </VerticalStackLayout>
 </ContentPage>

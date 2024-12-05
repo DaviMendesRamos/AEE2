@@ -5,6 +5,8 @@ using App_AEE.Model;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 
 public class ApiService
@@ -137,6 +139,59 @@ public class ApiService
         catch
         {
             return false; // Token inválido
+        }
+    }
+    public async Task<Usuario> GetUsuarioAtualAsync()
+    {
+        try
+        {
+            // Obtendo o token JWT armazenado
+            var token = Preferences.Get("accesstoken", string.Empty);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                _logger.LogError("Token JWT não encontrado.");
+                return null;
+            }
+
+            // Configura o cabeçalho de autorização com o token
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Faz a requisição GET para buscar os dados do usuário
+            var response = await _httpClient.GetAsync("https://suaapi.com/api/Usuarios/Atual");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonResult = await response.Content.ReadAsStringAsync();
+                var usuario = JsonSerializer.Deserialize<Usuario>(jsonResult, _serializerOptions);
+                return usuario;
+            }
+            else
+            {
+                _logger.LogError($"Erro ao obter dados do usuário: {response.StatusCode}");
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Erro ao obter dados do usuário: {ex.Message}");
+            return null;
+        }
+    }
+    public async Task<bool> AtualizarUsuarioAsync(EditaUsuario usuarioAtualizado)
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(usuarioAtualizado);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync("https://suaapi.com/api/Usuarios/Editar", content);
+
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao atualizar usuário: {ex.Message}");
+            return false;
         }
     }
 

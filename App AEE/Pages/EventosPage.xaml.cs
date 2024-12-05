@@ -1,13 +1,13 @@
 using App_AEE.Services;
-using App_AEE.Models;
+using App_AEE.Pages;
 
 namespace App_AEE.Pages
 {
     public partial class EventosPage : ContentPage
     {
-        private readonly EventoService _eventoService;
+        private readonly EventosService _eventoService;
 
-        public EventosPage(EventoService eventoService)
+        public EventosPage(EventosService eventoService)
         {
             InitializeComponent();
             _eventoService = eventoService;
@@ -17,20 +17,22 @@ namespace App_AEE.Pages
         {
             // Verifica se todos os campos estão preenchidos
             if (string.IsNullOrEmpty(txtNomeEvento.Text) ||
-                string.IsNullOrEmpty(txtLocalEvento.Text) ||
-                string.IsNullOrEmpty(txtDescricaoEvento.Text))
+                string.IsNullOrEmpty(txtLocalEvento.Text)
+                
+                )
             {
                 await DisplayAlert("Erro", "Todos os campos devem ser preenchidos.", "OK");
                 return;
             }
 
             // Cria o objeto de evento com os dados fornecidos
-            var novoEvento = new Evento
+            var novoEvento = new App_AEE.Models.Evento
             {
-                Nome = txtNomeEvento.Text,
-                Data = datePickerDataEvento.Date,
-                Local = txtLocalEvento.Text,
-                Descricao = txtDescricaoEvento.Text
+                NomeEvento = txtNomeEvento.Text,
+                DataInicio = datePickerDataInicio.Date,
+                DataFim = datePickerDataFim.Date,
+                LocalEvento = txtLocalEvento.Text,
+               
             };
 
             // Chama o serviço para criar o evento
