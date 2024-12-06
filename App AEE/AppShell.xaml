@@ -4,26 +4,38 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:App_AEE.Pages"
+    xmlns:adminPages="clr-namespace:App_AEE.Pages.AdminPages"
     Shell.FlyoutBehavior="Disabled"
     Shell.TabBarBackgroundColor="DarkGreen"
-    Shell.TabBarTitleColor="black"
+    Shell.TabBarTitleColor="Black"
     Shell.UnselectedColor="White"
-    Shell.ForegroundColor="White"
-    Title="App_AEE">
+    Shell.ForegroundColor="White">
 
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+    <TabBar>
+        <!-- Home Principal -->
         <ShellContent Title="HOME"
-             Route="home"
-             Icon="home.png"/>
+                      ContentTemplate="{DataTemplate pages:HomePrincipalPage}"
+                      Route="HomePrincipal"
+                      Icon="home.png"
+                      x:Name="HomePrincipalTab"
+                      IsVisible="False" />
+
+        <!-- Home Admin -->
+        <ShellContent Title="HOME"
+                      ContentTemplate="{DataTemplate adminPages:HomeAdminPage}"
+                      Route="HomeAdmin"
+                      Icon="home.png"
+                      x:Name="HomeAdminTab"
+                      IsVisible="False" />
 
         <ShellContent Title="EQUIPES"
-            ContentTemplate="{DataTemplate pages:EquipesPage }"
-            Route="EquipesPage"
-            Icon="equipe.png"/>
+                      ContentTemplate="{DataTemplate pages:EquipesPage}"
+                      Route="EquipesPage"
+                      Icon="equipe.png" />
 
         <ShellContent Title="PERFIL"
-            ContentTemplate="{DataTemplate pages:ExibirUsuarioPage }"
-            Route="ExibirUsuario"
-            Icon="profile.png"/>
-    </FlyoutItem>
+                      ContentTemplate="{DataTemplate pages:ExibirUsuarioPage}"
+                      Route="ExibirUsuario"
+                      Icon="profile.png" />
+    </TabBar>
 </Shell>

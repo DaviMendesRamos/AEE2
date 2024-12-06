@@ -6,4 +6,9 @@ public partial class EquipesPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	private async void CriarEquipeClicked(object sender, EventArgs e)
+	{
+        await Navigation.PushAsync(new CriarEquipePage());
+    }
 }

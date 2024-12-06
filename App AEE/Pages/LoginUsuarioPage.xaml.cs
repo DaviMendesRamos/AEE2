@@ -6,12 +6,15 @@ namespace App_AEE.Pages
     {
         private readonly ApiService _apiService;
         private readonly IValidator _validator;
+        private readonly EventosService _eventosService;
 
-        public LoginUsuarioPage(ApiService apiService, IValidator validator)
+        public LoginUsuarioPage(ApiService apiService, IValidator validator, EventosService eventosService)
         {
             InitializeComponent();
             _apiService = apiService;
             _validator = validator;
+            _eventosService = eventosService;
+
         }
 
         private async void btnEntrar_Clicked(object sender, EventArgs e)
@@ -33,23 +36,9 @@ namespace App_AEE.Pages
 
             if (!response.HasError)
             {
-                // Obtém a role do usuário armazenada nas preferências
-                var role = Preferences.Get("role", string.Empty);
-
-                if (role == "admin")
-                {
-                    // Redireciona para a página de administrador
-                    Application.Current!.MainPage = new ();
-                }
-                else if (role == "user")
-                {
-                    // Redireciona para a página de usuário comum
-                    Application.Current!.MainPage = new AppShell(_apiService, _validator);
-                }
-                else
-                {
-                    await DisplayAlert("Erro", "Não foi possível determinar o tipo de usuário.", "Cancelar");
-                }
+                Application.Current!.MainPage = new AppShell(_apiService, _validator, _eventosService);
+                
+               
             }
             else
             {
@@ -60,7 +49,7 @@ namespace App_AEE.Pages
 
         private async void btnRegistrar_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new RegistroUsuarioPage(_apiService, _validator));
+            await Navigation.PushAsync(new RegistroUsuarioPage(_apiService, _validator, _eventosService));
         }
     }
 }

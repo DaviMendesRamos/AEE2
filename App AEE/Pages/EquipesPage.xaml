@@ -2,11 +2,48 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_AEE.Pages.EquipesPage"
-             Title="EquipesPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#1c1c1c">
+
+    <ContentPage.Content>
+        <StackLayout Padding="20" Spacing="15">
+            <!-- Botão Criar Equipe -->
+            <Button Text="Criar Equipe"
+                    BackgroundColor="#2f2f2f"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    Clicked="CriarEquipeClicked" />
+
+            <!-- Lista de Equipes -->
+            <CollectionView ItemsSource="{Binding Equipes}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="#2f2f2f"
+                               CornerRadius="10"
+                               BorderColor="Gray"
+                               HasShadow="True"
+                               Padding="10"
+                               Margin="5">
+                            <StackLayout Orientation="Horizontal" VerticalOptions="Center" Spacing="10">
+                                <!-- Nome da Equipe -->
+                                <Label Text="{Binding NomeEquipe}"
+                                       TextColor="White"
+                                       FontAttributes="Bold"
+                                       FontSize="16"
+                                       VerticalOptions="Center" />
+
+                                <!-- Botão Editar -->
+                                <Button Text="Editar"
+                                        BackgroundColor="#007ACC"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditarEquipeCommand}"
+                                        CommandParameter="{Binding}" />
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

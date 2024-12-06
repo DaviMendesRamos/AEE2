@@ -3,24 +3,37 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_AEE.Pages.ExibirUsuarioPage"
              Title="ExibirUsuarioPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#1c1c1c">
     <VerticalStackLayout Padding="20">
         <Label Text="Seu Perfil"
                FontSize="Large"
                HorizontalTextAlignment="Center"
                FontAttributes="Bold"
                FontAutoScalingEnabled="True"
-               FontFamily="arial"/>
+               FontFamily="arial"
+               TextColor="White"/>
 
         <!-- Exibição dos dados do usuário -->
-        <Label x:Name="lblNome" FontSize="Medium" />
-        <Label x:Name="lblEmail" FontSize="Medium" />
-        <Label x:Name="lblTelefone" FontSize="Medium" />
+        <Label x:Name="lblNome" FontSize="Medium" TextColor="White" />
+        <Label x:Name="lblEmail" FontSize="Medium" TextColor="White" />
+        <Label x:Name="lblTelefone" FontSize="Medium" TextColor="White" />
 
         <!-- Botão para editar dados -->
-        <Button Text="Editar Dados" Clicked="OnEditarClicked"/>
+        <Button Text="Editar Dados" 
+                Clicked="OnEditarClicked"
+                BackgroundColor="#2f2f2f"
+                TextColor="White"
+                FontAttributes="Bold"
+                Margin="0,0,0,20"
+        />
 
         <!-- Botão para deslogar -->
-        <Button Text="Deslogar" x:Name="btndeslogar" Clicked="btndeslogar_Clicked" />
+        <Button Text="Deslogar" 
+                x:Name="btndeslogar" 
+                BackgroundColor="#2f2f2f"
+                TextColor="White"
+                FontAttributes="Bold"
+                Clicked="btndeslogar_Clicked" />
     </VerticalStackLayout>
 </ContentPage>

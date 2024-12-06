@@ -3,17 +3,20 @@ using App_AEE.Model;
 using Microsoft.Maui.Controls;
 using System;
 using System.Threading.Tasks;
+using App_AEE.Validations;
 
 namespace App_AEE.Pages
 {
     public partial class ExibirUsuarioPage : ContentPage
     {
         private readonly ApiService _apiService;
+        private readonly IValidator _validator;
+        private readonly EventosService _eventosService;
 
-        public ExibirUsuarioPage()
+        public ExibirUsuarioPage(ApiService apiService)
         {
             InitializeComponent();
-            _apiService = new ApiService(new HttpClient(), null); // Inicialize com o HttpClient e Logger
+            _apiService = apiService;
         }
 
         // Carregar dados do usuário ao carregar a página
@@ -68,6 +71,7 @@ namespace App_AEE.Pages
 
             // Navega para a página de login após deslogar
             await Navigation.PopToRootAsync();
+            await Navigation.PushAsync(new LoginUsuarioPage(_apiService, _validator, _eventosService));
         }
     }
 }

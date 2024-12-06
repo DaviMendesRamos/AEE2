@@ -4,6 +4,7 @@ using CommunityToolkit.Maui;
 using App_AEE.Services;
 using App_AEE.Pages;
 using App_AEE.Validations;
+using App_AEE.Pages.AdminPages;
 
 namespace App_AEE
 {
@@ -28,6 +29,8 @@ namespace App_AEE
             builder.Services.AddSingleton<EventosService>();
             builder.Services.AddTransient<EventosPage>();
             builder.Services.AddTransient<HomePrincipalPage>();
+            builder.Services.AddTransient<ExibirUsuarioPage>();
+            builder.Services.AddTransient<HomeAdminPage>(); // Ou Singleton se preferir uma única instância
 
             return builder.Build();
         }

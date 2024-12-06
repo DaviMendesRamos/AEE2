@@ -7,12 +7,14 @@ public partial class RegistroUsuarioPage : ContentPage
 {
 	private readonly ApiService _apiService;
 	private readonly IValidator _validator;
+	private readonly EventosService _eventosService;
 
-	public RegistroUsuarioPage(ApiService apiService, IValidator validator)
+	public RegistroUsuarioPage(ApiService apiService, IValidator validator, EventosService eventosService)
 	{
 		InitializeComponent();
 		_apiService = apiService;
 		_validator = validator;
+		_eventosService = eventosService;
 	}
 
 	private async void btnRegistrar_Clicked(object sender, EventArgs e)
@@ -26,7 +28,7 @@ public partial class RegistroUsuarioPage : ContentPage
 			if (!response.HasError)
 			{
 				await DisplayAlert("Aviso", "Sua conta foi criada com sucesso !!", "OK");
-				await Navigation.PushAsync(new LoginUsuarioPage(_apiService, _validator));
+				await Navigation.PushAsync(new LoginUsuarioPage(_apiService, _validator, _eventosService));
 			}
 			else
 			{
@@ -47,6 +49,6 @@ public partial class RegistroUsuarioPage : ContentPage
 
 	private async void TapLogin_TappedAsync(object sender, TappedEventArgs e)
 	{
-		await Navigation.PushAsync(new LoginUsuarioPage(_apiService, _validator));
+		await Navigation.PushAsync(new LoginUsuarioPage(_apiService, _validator, _eventosService));
 	}
 }

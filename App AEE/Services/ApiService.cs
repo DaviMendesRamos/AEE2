@@ -167,10 +167,10 @@ public class ApiService
             }
 
             // Configura o cabeçalho de autorização com o token
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
 
             // Faz a requisição GET para buscar os dados do usuário
-            var response = await _httpClient.GetAsync("https://suaapi.com/api/Usuarios/Atual");
+            var response = await _httpClient.GetAsync("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/GetUsuarioAtual");
 
             if (response.IsSuccessStatusCode)
             {
@@ -207,8 +207,92 @@ public class ApiService
         }
     }
 
-    // Enviar requisição POST
-    private async Task<HttpResponseMessage> PostRequest(string endpoint, HttpContent content)
+   
+
+    // Método para criar uma nova equipe
+    public async Task<ApiResponse<Equipe>> CriarEquipe(Equipe novaEquipe)
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(novaEquipe, _serializerOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Equipe/criarEquipe", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Erro ao criar equipe: {response.StatusCode} - {errorMessage}");
+                return new ApiResponse<Equipe> { ErrorMessage = errorMessage };
+            }
+
+            var jsonResult = await response.Content.ReadAsStringAsync();
+            var equipeCriada = JsonSerializer.Deserialize<Equipe>(jsonResult, _serializerOptions);
+
+            return new ApiResponse<Equipe> { Data = equipeCriada };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Erro ao criar equipe: {ex.Message}");
+            return new ApiResponse<Equipe> { ErrorMessage = ex.Message };
+        }
+    }
+
+    // Método para buscar uma equipe pelo nome
+    public async Task<ApiResponse<Equipe>> BuscarEquipePorNome(string nomeEquipe)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Equipe/buscar/{nomeEquipe}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Erro ao buscar equipe: {response.StatusCode} - {errorMessage}");
+                return new ApiResponse<Equipe> { ErrorMessage = errorMessage };
+            }
+
+            var jsonResult = await response.Content.ReadAsStringAsync();
+            var equipe = JsonSerializer.Deserialize<Equipe>(jsonResult, _serializerOptions);
+
+            return new ApiResponse<Equipe> { Data = equipe };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Erro ao buscar equipe: {ex.Message}");
+            return new ApiResponse<Equipe> { ErrorMessage = ex.Message };
+        }
+    }
+
+    // Método para deletar uma equipe pelo nome
+    public async Task<ApiResponse<bool>> DeletarEquipePorNome(string nomeEquipe)
+    {
+        try
+        {
+            var response = await _httpClient.DeleteAsync($"https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Equipe/deletar/{nomeEquipe}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Erro ao deletar equipe: {response.StatusCode} - {errorMessage}");
+                return new ApiResponse<bool> { ErrorMessage = errorMessage };
+            }
+
+            return new ApiResponse<bool> { Data = true };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Erro ao deletar equipe: {ex.Message}");
+            return new ApiResponse<bool> { ErrorMessage = ex.Message };
+        }
+    }
+
+    // Método auxiliar para requisições POST
+   
+
+
+// Enviar requisição POST
+private async Task<HttpResponseMessage> PostRequest(string endpoint, HttpContent content)
     {
         try
         {

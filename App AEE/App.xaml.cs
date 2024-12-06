@@ -10,13 +10,15 @@ public partial class App : Application
 {
 	private readonly ApiService _apiService;
 	private readonly IValidator _validator;
+	private readonly EventosService _eventosService;
 
 	// Construtor que recebe dependências via injeção
-	public App(ApiService apiService, IValidator validator)
+	public App(ApiService apiService, IValidator validator, EventosService eventosService)
 	{
 		InitializeComponent();
 		_apiService = apiService;
 		_validator = validator;
+		_eventosService = eventosService;
 
 		// Captura global de erros
 		AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
@@ -40,12 +42,12 @@ public partial class App : Application
         if (string.IsNullOrEmpty(accessToken))
         {
             // Usuário não está autenticado, redireciona para a página de login
-            Application.Current.MainPage = new NavigationPage(new LoginUsuarioPage(_apiService, _validator));
+            Application.Current.MainPage = new NavigationPage(new LoginUsuarioPage(_apiService, _validator, _eventosService));
         }
         else
         {
             // Usuário autenticado, redireciona para a página inicial (HomePage, ou qualquer página principal definida)
-            Application.Current.MainPage = new AppShell(_apiService, _validator);
+            Application.Current.MainPage = new AppShell(_apiService, _validator,_eventosService);
         }
     }
 
