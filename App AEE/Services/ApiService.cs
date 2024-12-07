@@ -208,45 +208,34 @@ public class ApiService
         }
     }
 
-    public async Task<bool> UploadImagemUsuarioAsync(byte[] imageArray)
+    public async Task<ApiResponse<bool>> UploadImagemUsuario(byte[] imageArray)
     {
         try
         {
-            // Criando o conteúdo multipart/form-data com a imagem
             var content = new MultipartFormDataContent();
-
-            // Adiciona o arquivo da imagem ao conteúdo da requisição
             content.Add(new ByteArrayContent(imageArray), "imagem", "image.jpg");
+            var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/uploadfotousuario", content);
 
-            // Fazendo a requisição POST para a API de upload
-            var response = await _httpClient.PostAsync("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/uploadfotousuario", content);
-
-            // Verificando a resposta da requisição
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                // Retorna verdadeiro em caso de sucesso
-                return true;
-            }
-            else
-            {
-                // Log de erro se a resposta não for bem-sucedida
                 string errorMessage = response.StatusCode == HttpStatusCode.Unauthorized
-                    ? "Usuário não autorizado para realizar o upload da imagem."
-                    : $"Erro ao enviar a imagem. Status code: {response.StatusCode}";
+                  ? "Unauthorized"
+                  : $"Erro ao enviar requisição HTTP: {response.StatusCode}";
 
-                _logger.LogError(errorMessage);
-                return false;
+                _logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
+                return new ApiResponse<bool> { ErrorMessage = errorMessage };
             }
+            return new ApiResponse<bool> { Data = true };
         }
         catch (Exception ex)
         {
-            // Log de erro em caso de exceção
-            _logger.LogError($"Erro ao tentar enviar a imagem: {ex.Message}");
-            return false;
+            _logger.LogError($"Erro ao fazer upload da imagem do usuário: {ex.Message}");
+            return new ApiResponse<bool> { ErrorMessage = ex.Message };
         }
-
-
     }
+
+
+
 
 // Método para criar uma nova equipe
     public async Task<ApiResponse<Equipe>> CriarEquipe(Equipe novaEquipe)

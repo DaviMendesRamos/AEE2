@@ -14,12 +14,17 @@
                    HeightRequest="120"
                    WidthRequest="120"
                    HorizontalOptions="Center">
-                <Image Source="profile_placeholder.png"
-                       Aspect="AspectFill"
-                       HeightRequest="100"
-                       WidthRequest="100"/>
-
-               
+                <!-- Botão de Imagem -->
+                <ImageButton x:Name="ImgBtnPerfil"
+                             Source="profile_placeholder.png"
+                             Aspect="AspectFill"
+                             HeightRequest="100"
+                             WidthRequest="100"
+                             BackgroundColor="Transparent"
+                             CornerRadius="50"
+                             BorderWidth="2"
+                             BorderColor="Gray"
+                             Clicked="OnUploadClicked" />
             </Frame>
 
             <!-- Nome do Usuário -->
@@ -53,12 +58,14 @@
                     BackgroundColor="#2f2f2f"
                     TextColor="White"
                     FontAttributes="Bold" />
-            
+
+            <!-- Botão para Upload -->
             <Button Text="Upload de foto" 
                     Clicked="OnUploadClicked"
                     BackgroundColor="#2f2f2f"
                     TextColor="White"
                     FontAttributes="Bold" />
+
             <!-- Botão para Deslogar -->
             <Button Text="Deslogar" 
                     Clicked="btndeslogar_Clicked"

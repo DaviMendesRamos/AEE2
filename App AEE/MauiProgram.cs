@@ -25,8 +25,8 @@ namespace App_AEE
             builder.Services.AddHttpClient();
             builder.Services.AddSingleton<ApiService>();
 			builder.Services.AddSingleton<IValidator,Validator>();
-			builder.Services.AddTransient<LoginUsuarioPage>();
-            builder.Services.AddSingleton<EventosService>();
+			builder.Services.AddSingleton<EventosService>();
+            builder.Services.AddTransient<LoginUsuarioPage>();
             builder.Services.AddTransient<EventosPage>();
             builder.Services.AddTransient<HomePrincipalPage>();
             builder.Services.AddTransient<ExibirUsuarioPage>();

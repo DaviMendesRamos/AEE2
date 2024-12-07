@@ -56,34 +56,71 @@ namespace App_AEE.Pages
                 Console.WriteLine($"Erro: {ex.Message}");
             }
         }
+        private async Task<byte[]?> SelecionarImagemAsync()
+        {
+            try
+            {
+                // Abre o seletor de fotos
+                var arquivo = await MediaPicker.PickPhotoAsync();
+
+                if (arquivo is null)
+                {
+                    await DisplayAlert("Atenção", "Nenhuma imagem foi selecionada.", "Ok");
+                    return null;
+                }
+
+                using (var stream = await arquivo.OpenReadAsync())
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    return memoryStream.ToArray();
+                }
+            }
+            catch (FeatureNotSupportedException)
+            {
+                await DisplayAlert("Erro", "A funcionalidade não é suportada neste dispositivo.", "Ok");
+            }
+            catch (PermissionException)
+            {
+                await DisplayAlert("Erro", "Permissões não concedidas para acessar a câmera ou galeria.", "Ok");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", $"Erro ao selecionar a imagem: {ex.Message}", "Ok");
+            }
+            return null;
+        }
 
         private async void OnUploadClicked(object sender, EventArgs e)
         {
             // Selecionar imagem
-            var fileResult = await FilePicker.PickAsync(new PickOptions
+            try
             {
-                PickerTitle = "Selecione uma imagem de perfil"
-            });
-
-            if (fileResult != null)
-            {
-                var stream = await fileResult.OpenReadAsync();
-
-                // Converte a imagem para byte array
-                var imageArray = new byte[stream.Length];
-                await stream.ReadAsync(imageArray, 0, (int)stream.Length);
-
-                // Chama o serviço para fazer o upload da imagem
-                var uploadSuccess = await _apiService.UploadImagemUsuarioAsync(imageArray);
-                if (uploadSuccess)
+                // Seleciona a imagem do dispositivo
+                var imagemArray = await SelecionarImagemAsync();
+                if (imagemArray is null)
                 {
-                    await DisplayAlert("Sucesso", "Imagem carregada com sucesso!", "OK");
-                    await CarregarDadosUsuario(); // Atualiza a imagem carregada na UI
+                    await DisplayAlert("Erro", "Não foi possível carregar a imagem.", "Ok");
+                    return;
+                }
+
+                // Atualiza a visualização da imagem no botão
+                ImgBtnPerfil.Source = ImageSource.FromStream(() => new MemoryStream(imagemArray));
+
+                // Envia a imagem para o servidor usando ApiService
+                var response = await _apiService.UploadImagemUsuario(imagemArray);
+                if (response.Data)
+                {
+                    await DisplayAlert("Sucesso", "Imagem enviada com sucesso!", "Ok");
                 }
                 else
                 {
-                    await DisplayAlert("Erro", "Erro ao carregar a imagem", "OK");
+                    await DisplayAlert("Erro", response.ErrorMessage ?? "Ocorreu um erro ao enviar a imagem.", "Ok");
                 }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", $"Ocorreu um erro inesperado: {ex.Message}", "Ok");
             }
         }
 
