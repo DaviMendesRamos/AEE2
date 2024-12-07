@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net;
 
 
 public class ApiService
@@ -126,7 +127,6 @@ public class ApiService
         }
     }
 
-
     // Método para verificar se o token JWT é válido
     private bool IsTokenValid(string token)
     {
@@ -166,8 +166,9 @@ public class ApiService
                 return null;
             }
 
-            // Configura o cabeçalho de autorização com o token
-            
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
 
             // Faz a requisição GET para buscar os dados do usuário
             var response = await _httpClient.GetAsync("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/GetUsuarioAtual");
@@ -207,9 +208,47 @@ public class ApiService
         }
     }
 
-   
+    public async Task<bool> UploadImagemUsuarioAsync(byte[] imageArray)
+    {
+        try
+        {
+            // Criando o conteúdo multipart/form-data com a imagem
+            var content = new MultipartFormDataContent();
 
-    // Método para criar uma nova equipe
+            // Adiciona o arquivo da imagem ao conteúdo da requisição
+            content.Add(new ByteArrayContent(imageArray), "imagem", "image.jpg");
+
+            // Fazendo a requisição POST para a API de upload
+            var response = await _httpClient.PostAsync("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/uploadfotousuario", content);
+
+            // Verificando a resposta da requisição
+            if (response.IsSuccessStatusCode)
+            {
+                // Retorna verdadeiro em caso de sucesso
+                return true;
+            }
+            else
+            {
+                // Log de erro se a resposta não for bem-sucedida
+                string errorMessage = response.StatusCode == HttpStatusCode.Unauthorized
+                    ? "Usuário não autorizado para realizar o upload da imagem."
+                    : $"Erro ao enviar a imagem. Status code: {response.StatusCode}";
+
+                _logger.LogError(errorMessage);
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log de erro em caso de exceção
+            _logger.LogError($"Erro ao tentar enviar a imagem: {ex.Message}");
+            return false;
+        }
+
+
+    }
+
+// Método para criar uma nova equipe
     public async Task<ApiResponse<Equipe>> CriarEquipe(Equipe novaEquipe)
     {
         try
@@ -292,7 +331,7 @@ public class ApiService
 
 
 // Enviar requisição POST
-private async Task<HttpResponseMessage> PostRequest(string endpoint, HttpContent content)
+    private async Task<HttpResponseMessage> PostRequest(string endpoint, HttpContent content)
     {
         try
         {
@@ -306,3 +345,4 @@ private async Task<HttpResponseMessage> PostRequest(string endpoint, HttpContent
         }
     }
 }
+

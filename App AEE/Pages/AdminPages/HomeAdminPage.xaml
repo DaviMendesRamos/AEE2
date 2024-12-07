@@ -32,7 +32,7 @@
                 </StackLayout>
             </Frame>
 
-            <!-- Cartão 2 - Amigos -->
+            <!-- Cartão 2 - Amistoso -->
             <Frame Grid.Row="0" Grid.Column="1"
                    BackgroundColor="#2f2f2f"
                    CornerRadius="10"
@@ -66,7 +66,7 @@
                 </Frame.GestureRecognizers>
                 <StackLayout VerticalOptions="Center">
                     <!-- Ícone ou imagem -->
-                    <Image Source="inscrever.png" HeightRequest="75" />
+                    <Image Source="criarevento.png" HeightRequest="75" />
                     <!-- Texto do botão -->
                     <Label Text="Criar. EVENTO"
                            FontFamily="Arial"

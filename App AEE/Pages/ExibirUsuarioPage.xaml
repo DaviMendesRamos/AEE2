@@ -2,38 +2,69 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_AEE.Pages.ExibirUsuarioPage"
-             Title="ExibirUsuarioPage"
+             Title="Perfil"
              Shell.NavBarIsVisible="False"
              BackgroundColor="#1c1c1c">
-    <VerticalStackLayout Padding="20">
-        <Label Text="Seu Perfil"
-               FontSize="Large"
-               HorizontalTextAlignment="Center"
-               FontAttributes="Bold"
-               FontAutoScalingEnabled="True"
-               FontFamily="arial"
-               TextColor="White"/>
+    <Grid RowDefinitions="2*, 1*" ColumnDefinitions="*">
+        <!-- Parte Superior: Imagem e Informações do Usuário -->
+        <VerticalStackLayout Grid.Row="0" Padding="20, 40, 20, 20" Spacing="15">
+            <!-- Imagem de Perfil -->
+            <Frame BackgroundColor="#2f2f2f"
+                   CornerRadius="100"
+                   HeightRequest="120"
+                   WidthRequest="120"
+                   HorizontalOptions="Center">
+                <Image Source="profile_placeholder.png"
+                       Aspect="AspectFill"
+                       HeightRequest="100"
+                       WidthRequest="100"/>
 
-        <!-- Exibição dos dados do usuário -->
-        <Label x:Name="lblNome" FontSize="Medium" TextColor="White" />
-        <Label x:Name="lblEmail" FontSize="Medium" TextColor="White" />
-        <Label x:Name="lblTelefone" FontSize="Medium" TextColor="White" />
+               
+            </Frame>
 
-        <!-- Botão para editar dados -->
-        <Button Text="Editar Dados" 
-                Clicked="OnEditarClicked"
-                BackgroundColor="#2f2f2f"
-                TextColor="White"
-                FontAttributes="Bold"
-                Margin="0,0,0,20"
-        />
+            <!-- Nome do Usuário -->
+            <Label x:Name="lblNome" 
+                   Text="Nome do Usuário"
+                   FontSize="Large"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center" />
 
-        <!-- Botão para deslogar -->
-        <Button Text="Deslogar" 
-                x:Name="btndeslogar" 
-                BackgroundColor="#2f2f2f"
-                TextColor="White"
-                FontAttributes="Bold"
-                Clicked="btndeslogar_Clicked" />
-    </VerticalStackLayout>
+            <!-- Email do Usuário -->
+            <Label x:Name="lblEmail" 
+                   Text="Email do Usuário"
+                   FontSize="Medium"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center" />
+
+            <!-- Telefone do Usuário -->
+            <Label x:Name="lblTelefone" 
+                   Text="Telefone do Usuário"
+                   FontSize="Medium"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+
+        <!-- Parte Inferior: Botões -->
+        <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="15">
+            <!-- Botão para Editar Dados -->
+            <Button Text="Editar Dados" 
+                    Clicked="OnEditarClicked"
+                    BackgroundColor="#2f2f2f"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+            
+            <Button Text="Upload de foto" 
+                    Clicked="OnUploadClicked"
+                    BackgroundColor="#2f2f2f"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+            <!-- Botão para Deslogar -->
+            <Button Text="Deslogar" 
+                    Clicked="btndeslogar_Clicked"
+                    BackgroundColor="#E12E2E"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>

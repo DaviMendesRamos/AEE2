@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls;
 using System;
 using System.Threading.Tasks;
 using App_AEE.Validations;
+using Microsoft.Maui.Storage;
 
 namespace App_AEE.Pages
 {
@@ -56,6 +57,37 @@ namespace App_AEE.Pages
             }
         }
 
+        private async void OnUploadClicked(object sender, EventArgs e)
+        {
+            // Selecionar imagem
+            var fileResult = await FilePicker.PickAsync(new PickOptions
+            {
+                PickerTitle = "Selecione uma imagem de perfil"
+            });
+
+            if (fileResult != null)
+            {
+                var stream = await fileResult.OpenReadAsync();
+
+                // Converte a imagem para byte array
+                var imageArray = new byte[stream.Length];
+                await stream.ReadAsync(imageArray, 0, (int)stream.Length);
+
+                // Chama o serviço para fazer o upload da imagem
+                var uploadSuccess = await _apiService.UploadImagemUsuarioAsync(imageArray);
+                if (uploadSuccess)
+                {
+                    await DisplayAlert("Sucesso", "Imagem carregada com sucesso!", "OK");
+                    await CarregarDadosUsuario(); // Atualiza a imagem carregada na UI
+                }
+                else
+                {
+                    await DisplayAlert("Erro", "Erro ao carregar a imagem", "OK");
+                }
+            }
+        }
+
+
         // Método chamado ao clicar no botão de editar
         private async void OnEditarClicked(object sender, EventArgs e)
         {
@@ -71,7 +103,7 @@ namespace App_AEE.Pages
 
             // Navega para a página de login após deslogar
             await Navigation.PopToRootAsync();
-            await Navigation.PushAsync(new LoginUsuarioPage(_apiService, _validator, _eventosService));
+            Application.Current.MainPage = new NavigationPage(new LoginUsuarioPage(_apiService, _validator, _eventosService));
         }
     }
 }
