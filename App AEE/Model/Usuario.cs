@@ -14,5 +14,7 @@ namespace App_AEE.Model
         public string Email { get; set; }
         public string Telefone { get; set; }
         public bool IsAdmin { get; set; }
+
+        public string UrlImagem { get; set; }
     }
 }

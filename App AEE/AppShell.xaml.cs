@@ -11,7 +11,6 @@ public partial class AppShell : Shell
     private readonly IValidator _validator;
     private readonly EventosService _eventosService;
 
-    // Use injeção de dependência para fornecer as instâncias dos serviços
     public AppShell(ApiService apiService, IValidator validator, EventosService eventosService)
     {
         InitializeComponent();
@@ -20,40 +19,71 @@ public partial class AppShell : Shell
         _eventosService = eventosService;
 
         // Registra rotas para navegação
-        Routing.RegisterRoute("HomeAdmin", typeof(HomeAdminPage));
-        Routing.RegisterRoute("HomePrincipal", typeof(HomePrincipalPage));
+        Routing.RegisterRoute(nameof(HomeAdminPage), typeof(HomeAdminPage));
+        Routing.RegisterRoute(nameof(HomePrincipalPage), typeof(HomePrincipalPage));
+        Routing.RegisterRoute(nameof(EventosPage), typeof(EventosPage));
+        Routing.RegisterRoute(nameof(EquipesPage), typeof(EquipesPage));
 
         // Configura a visibilidade das páginas
         ConfigureHomeVisibility();
+
+        // Registra o evento Navigated para tratar navegação após troca de aba
+        this.Navigated += OnShellNavigated; // Substituí Shell.Navigated por this.Navigated
     }
 
     private void ConfigureHomeVisibility()
     {
+        // Obtém a role salva nas preferências (admin ou user)
         var role = Preferences.Get("role", string.Empty);
 
-        // Controla a visibilidade das abas com base na role
-        if (role == "admin")
-        {
-            HomeAdminTab.IsVisible = true;
-            HomePrincipalTab.IsVisible = false;
-        }
-        else
-        {
-            HomeAdminTab.IsVisible = false;
-            HomePrincipalTab.IsVisible = true;
-        }
+        // Controla a visibilidade das abas de acordo com a role
+        HomeAdminTab.IsVisible = role == "admin";
+        HomePrincipalTab.IsVisible = role != "admin";
     }
 
-    // Alteração para garantir que as páginas sejam instanciadas com DI
-    public void NavigateToHomeAdmin()
+    /// <summary>
+    /// Navega para a página HomeAdmin, garantindo a navegação correta.
+    /// </summary>
+    public async Task NavigateToHomeAdminAsync()
     {
-        // Navega para HomeAdminPage, garantindo a injeção de dependência
-        Shell.Current.GoToAsync("HomeAdmin");
+        await this.GoToAsync("//HomeAdmin"); // Navegação absoluta
     }
 
-    public void NavigateToHomePrincipal()
+    /// <summary>
+    /// Navega para a página HomePrincipal, garantindo a navegação correta.
+    /// </summary>
+    public async Task NavigateToHomePrincipalAsync()
     {
-        // Navega para HomePrincipalPage
-        Shell.Current.GoToAsync("HomePrincipal");
+        await this.GoToAsync("//HomePrincipal"); // Navegação absoluta
+    }
+    private async void OnNavigarParaEquipesPage(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("EquipesPage");
+    }
+
+    /// <summary>
+    /// Evento disparado após a navegação ser concluída. Garante a reinicialização da página.
+    /// </summary>
+    private async void OnShellNavigated(object sender, ShellNavigatedEventArgs e)
+    {
+        // Verifica se a aba "HomeAdmin" ou "HomePrincipal" foi selecionada
+        if (e.Current.Location.OriginalString.Contains("HomeAdmin") && e.Source == ShellNavigationSource.ShellSectionChanged)
+        {
+            // Reinicia a página HomeAdmin
+            await this.GoToAsync("///HomeAdmin");
+        }
+        else if (e.Current.Location.OriginalString.Contains("HomePrincipal") && e.Source == ShellNavigationSource.ShellSectionChanged)
+        {
+            // Reinicia a página HomePrincipal
+            await this.GoToAsync("///HomePrincipal");
+        }
+    }
+    
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        // Remove o evento para evitar múltiplas assinaturas
+        this.Navigated -= OnShellNavigated;
     }
 }

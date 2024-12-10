@@ -2,5 +2,5 @@
 
 public static class AppConfig
 {
-	public static string BaseUrl { get; set; } = "http://192.168.96.1:5053"; // Ou outro endereço
+	public static string BaseUrl { get; set; } = "https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net"; // Ou outro endereço
 }

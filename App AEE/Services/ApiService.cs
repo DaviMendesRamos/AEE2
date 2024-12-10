@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 
 
 public class ApiService
@@ -214,7 +216,7 @@ public class ApiService
         {
             var content = new MultipartFormDataContent();
             content.Add(new ByteArrayContent(imageArray), "imagem", "image.jpg");
-            var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/uploadfotousuario", content);
+            var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/usuarios/uploadfotousuario", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -233,20 +235,31 @@ public class ApiService
             return new ApiResponse<bool> { ErrorMessage = ex.Message };
         }
     }
-
-
-
-
-// Método para criar uma nova equipe
+    // Método para criar uma nova equipe
     public async Task<ApiResponse<Equipe>> CriarEquipe(Equipe novaEquipe)
     {
         try
         {
+            // Recupera o token JWT armazenado localmente (ajuste conforme necessário)
+            var token = Preferences.Get("accesstoken", string.Empty);
+            if (string.IsNullOrEmpty(token))
+            {
+                return new ApiResponse<Equipe> { ErrorMessage = "Token JWT não encontrado." };
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Serializa a equipe para o formato JSON
             var json = JsonSerializer.Serialize(novaEquipe, _serializerOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+            // Adiciona o cabeçalho Authorization com o token JWT
+           
+
+            // Envia a requisição POST para a API
             var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Equipe/criarEquipe", content);
 
+            // Verifica se a resposta foi bem-sucedida
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
@@ -254,6 +267,7 @@ public class ApiService
                 return new ApiResponse<Equipe> { ErrorMessage = errorMessage };
             }
 
+            // Processa a resposta bem-sucedida
             var jsonResult = await response.Content.ReadAsStringAsync();
             var equipeCriada = JsonSerializer.Deserialize<Equipe>(jsonResult, _serializerOptions);
 
@@ -265,6 +279,45 @@ public class ApiService
             return new ApiResponse<Equipe> { ErrorMessage = ex.Message };
         }
     }
+
+    public async Task<List<Equipe>> ListarEquipesDoUsuario()
+    {
+        var token = Preferences.Get("accesstoken", string.Empty);
+
+        if (string.IsNullOrEmpty(token))
+        {
+            _logger.LogError("Token JWT não encontrado.");
+            return null;
+        }
+
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await _httpClient.GetAsync("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Equipe/equipesDoUsuario");
+
+        if (response.StatusCode == HttpStatusCode.NoContent)
+        {
+            _logger.LogInformation("Usuário não está em nenhuma equipe.");
+            return new List<Equipe>();
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            _logger.LogError($"Erro ao buscar equipes: {response.StatusCode} - {errorMessage}");
+            throw new Exception($"Erro ao buscar as equipes do usuário: {response.ReasonPhrase}");
+        }
+
+        var jsonResult = await response.Content.ReadAsStringAsync();
+
+        if (string.IsNullOrWhiteSpace(jsonResult))
+        {
+            _logger.LogInformation("Resposta vazia, retornando lista vazia.");
+            return new List<Equipe>();
+        }
+
+        return JsonSerializer.Deserialize<List<Equipe>>(jsonResult, _serializerOptions) ?? new List<Equipe>();
+    }
+
 
     // Método para buscar uma equipe pelo nome
     public async Task<ApiResponse<Equipe>> BuscarEquipePorNome(string nomeEquipe)

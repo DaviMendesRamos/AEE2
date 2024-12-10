@@ -5,6 +5,8 @@ using System;
 using System.Threading.Tasks;
 using App_AEE.Validations;
 using Microsoft.Maui.Storage;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 
 namespace App_AEE.Pages
 {
@@ -38,6 +40,20 @@ namespace App_AEE.Pages
                     lblNome.Text = "Nome: " + usuario.Nome;
                     lblEmail.Text = "Email: " + usuario.Email;
                     lblTelefone.Text = "Telefone: " + usuario.Telefone;
+                    if (!string.IsNullOrEmpty(usuario.UrlImagem))
+                    {
+                        ImgBtnPerfil.Source = new UriImageSource
+                        {
+                            Uri = new Uri(usuario.UrlImagem),
+                            CachingEnabled = true, // Habilitar cache para a imagem
+                            CacheValidity = TimeSpan.FromDays(1) // Definir a validade do cache
+                        };
+                    }
+                    else
+                    {
+                        // Se a URL da imagem não estiver disponível, exiba uma imagem padrão ou nada
+                        ImgBtnPerfil.Source = "defaultProfileImage.png"; // Substitua pelo caminho de uma imagem padrão
+                    }
                 }
                 else
                 {
@@ -56,18 +72,14 @@ namespace App_AEE.Pages
                 Console.WriteLine($"Erro: {ex.Message}");
             }
         }
+
         private async Task<byte[]?> SelecionarImagemAsync()
         {
             try
             {
-                // Abre o seletor de fotos
                 var arquivo = await MediaPicker.PickPhotoAsync();
 
-                if (arquivo is null)
-                {
-                    await DisplayAlert("Atenção", "Nenhuma imagem foi selecionada.", "Ok");
-                    return null;
-                }
+                if (arquivo is null) return null;
 
                 using (var stream = await arquivo.OpenReadAsync())
                 using (var memoryStream = new MemoryStream())
@@ -78,11 +90,11 @@ namespace App_AEE.Pages
             }
             catch (FeatureNotSupportedException)
             {
-                await DisplayAlert("Erro", "A funcionalidade não é suportada neste dispositivo.", "Ok");
+                await DisplayAlert("Erro", "A funcionalidade n o   suportada no dispositivo", "Ok");
             }
             catch (PermissionException)
             {
-                await DisplayAlert("Erro", "Permissões não concedidas para acessar a câmera ou galeria.", "Ok");
+                await DisplayAlert("Erro", "Permiss es n o concedidas para acessar a c mera ou galeria", "Ok");
             }
             catch (Exception ex)
             {
@@ -91,31 +103,26 @@ namespace App_AEE.Pages
             return null;
         }
 
-        private async void OnUploadClicked(object sender, EventArgs e)
+        private async void ImgBtnPerfil_Clicked(object sender, EventArgs e)
         {
-            // Selecionar imagem
             try
             {
-                // Seleciona a imagem do dispositivo
                 var imagemArray = await SelecionarImagemAsync();
                 if (imagemArray is null)
                 {
-                    await DisplayAlert("Erro", "Não foi possível carregar a imagem.", "Ok");
+                    await DisplayAlert("Erro", "Não foi possível carregar a imagem", "Ok");
                     return;
                 }
-
-                // Atualiza a visualização da imagem no botão
                 ImgBtnPerfil.Source = ImageSource.FromStream(() => new MemoryStream(imagemArray));
 
-                // Envia a imagem para o servidor usando ApiService
                 var response = await _apiService.UploadImagemUsuario(imagemArray);
                 if (response.Data)
                 {
-                    await DisplayAlert("Sucesso", "Imagem enviada com sucesso!", "Ok");
+                    await DisplayAlert("", "Imagem enviada com sucesso", "Ok");
                 }
                 else
                 {
-                    await DisplayAlert("Erro", response.ErrorMessage ?? "Ocorreu um erro ao enviar a imagem.", "Ok");
+                    await DisplayAlert("Erro", response.ErrorMessage ?? "Ocorreu um erro desconhecido", "Cancela");
                 }
             }
             catch (Exception ex)
@@ -123,6 +130,35 @@ namespace App_AEE.Pages
                 await DisplayAlert("Erro", $"Ocorreu um erro inesperado: {ex.Message}", "Ok");
             }
         }
+
+        private async void OnUploadClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var imagemArray = await SelecionarImagemAsync();
+                if (imagemArray is null)
+                {
+                    await DisplayAlert("Erro", "Não foi possível carregar a imagem", "Ok");
+                    return;
+                }
+                ImgBtnPerfil.Source = ImageSource.FromStream(() => new MemoryStream(imagemArray));
+
+                var response = await _apiService.UploadImagemUsuario(imagemArray);
+                if (response.Data)
+                {
+                    await DisplayAlert("", "Imagem enviada com sucesso", "Ok");
+                }
+                else
+                {
+                    await DisplayAlert("Erro", response.ErrorMessage ?? "Ocorreu um erro desconhecido", "Cancela");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", $"Ocorreu um erro inesperado: {ex.Message}", "Ok");
+            }
+        }
+       
 
 
         // Método chamado ao clicar no botão de editar

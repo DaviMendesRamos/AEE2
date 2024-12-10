@@ -53,7 +53,7 @@
                 </StackLayout>
             </Frame>
 
-            <!-- Cartão 3 - Inscrever em Evento -->
+            <!-- Cartão 3 - Criar em Evento -->
             <Frame Grid.Row="1" Grid.Column="0"
                    BackgroundColor="#2f2f2f"
                    CornerRadius="10"
@@ -62,13 +62,13 @@
                    Padding="10"
                    Margin="10">
                 <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnInscreverEventoTapped" />
+                    <TapGestureRecognizer Tapped="OnCriarEventoTapped" />
                 </Frame.GestureRecognizers>
                 <StackLayout VerticalOptions="Center">
                     <!-- Ícone ou imagem -->
                     <Image Source="criarevento.png" HeightRequest="75" />
                     <!-- Texto do botão -->
-                    <Label Text="Criar. EVENTO"
+                    <Label Text="CRIAR EVENTO"
                            FontFamily="Arial"
                            FontSize="16"
                            TextColor="White"

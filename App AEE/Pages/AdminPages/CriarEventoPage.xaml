@@ -2,11 +2,77 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_AEE.Pages.AdminPages.CriarEventoPage"
-             Title="CriarEventoPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             BackgroundColor="#1c1c1c"
+             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+             android:TabbedPage.ToolbarPlacement="Bottom"
+             Shell.BackgroundColor="#1c1c1c"
+             >
+
+    <Grid RowDefinitions="Auto, *" Padding="20">
+        <!-- Título -->
+        <Label Text="Criar Novo Evento"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               TextColor="White"
+               Margin="0,20,0,10"/>
+
+        <!-- Formulário Centralizado -->
+        <VerticalStackLayout Grid.Row="1"
+                             Spacing="15"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center">
+
+            <!-- Nome do Evento -->
+            <Entry x:Name="txtNomeEvento"
+                   Placeholder="Nome do Evento"
+                   PlaceholderColor="#A9A9A9"
+                   BackgroundColor="#2f2f2f"
+                   TextColor="White"
+                   WidthRequest="300"
+                   HeightRequest="50"
+                   Margin="0,0,0,10"
+                   HorizontalTextAlignment="Center"/>
+
+            <!-- Data de Início -->
+            <DatePicker x:Name="datePickerDataInicio"
+                        TextColor="White"
+                        BackgroundColor="#2f2f2f"
+                        WidthRequest="300"
+                        HeightRequest="50"
+                        Margin="0,0,0,10"/>
+
+            <!-- Data de Fim -->
+            <DatePicker x:Name="datePickerDataFim"
+                        TextColor="White"
+                        BackgroundColor="#2f2f2f"
+                        WidthRequest="300"
+                        HeightRequest="50"
+                        Margin="0,0,0,10"/>
+
+            <!-- Local do Evento -->
+            <Entry x:Name="txtLocalEvento"
+                   Placeholder="Local do Evento"
+                   PlaceholderColor="#A9A9A9"
+                   BackgroundColor="#2f2f2f"
+                   TextColor="White"
+                   WidthRequest="300"
+                   HeightRequest="50"
+                   Margin="0,0,0,10"
+                   HorizontalTextAlignment="Center"/>
+
+            <!-- Botão -->
+            <Button Text="Criar Evento"
+                    Clicked="btnCriarEvento_Clicked"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    FontSize="18"
+                    CornerRadius="10"
+                    WidthRequest="300"
+                    HeightRequest="50"/>
+
+        </VerticalStackLayout>
+    </Grid>
+
 </ContentPage>

@@ -4,9 +4,16 @@
              x:Class="App_AEE.Pages.CriarEquipePage"
              Title="CriarEquipePage">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        
+        
+        <Entry x:Name="txtNomeEquipe" Placeholder="Nome da Equipe" />
+        <Entry x:Name="txtModalidade" Placeholder="Modalidade" />
+
+        <Button Text="Criar Equipe"
+                BackgroundColor="#2f2f2f"
+                TextColor="White"
+                FontAttributes="Bold"
+                Clicked="btnCriarEquipe_Clicked" />
+
     </VerticalStackLayout>
 </ContentPage>

@@ -15,7 +15,7 @@
                     Clicked="CriarEquipeClicked" />
 
             <!-- Lista de Equipes -->
-            <CollectionView ItemsSource="{Binding Equipes}" SelectionMode="None">
+            <CollectionView ItemsSource="{Binding Equipes}" SelectionMode="None" x:Name="equipesCollectionView">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame BackgroundColor="#2f2f2f"

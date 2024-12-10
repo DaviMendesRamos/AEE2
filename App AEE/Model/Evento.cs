@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace App_AEE.Models
+namespace App_AEE.Model
 {
     public class Evento
     {

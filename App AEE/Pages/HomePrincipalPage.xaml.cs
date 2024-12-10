@@ -14,6 +14,6 @@ public partial class HomePrincipalPage : ContentPage
 
     private async void OnInscreverEventoTapped(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new EventosPage(_eventosService));
+        await Shell.Current.GoToAsync(nameof(EventosPage));
     }
 }

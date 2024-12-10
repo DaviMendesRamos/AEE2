@@ -1,4 +1,6 @@
 using App_AEE.Services;
+using CommunityToolkit.Maui.Views;
+using App_AEE.Model;
 using App_AEE.Pages;
 
 namespace App_AEE.Pages
@@ -6,50 +8,30 @@ namespace App_AEE.Pages
     public partial class EventosPage : ContentPage
     {
         private readonly EventosService _eventoService;
+        private readonly ApiService _apiService;
+        public Command<Evento> InscreverCommand { get; }
 
-        public EventosPage(EventosService eventoService)
+        public EventosPage(EventosService eventoService, ApiService apiService)
         {
             InitializeComponent();
             _eventoService = eventoService;
+            _apiService = apiService;
+            InscreverCommand = new Command<Evento>(InscreverEquipe);
+
+            // Define o BindingContext como a própria página
+            BindingContext = this;
+
         }
 
-        private async void btnCriarEvento_Clicked(object sender, EventArgs e)
+        protected override async void OnAppearing()
         {
-            // Verifica se todos os campos estão preenchidos
-            if (string.IsNullOrEmpty(txtNomeEvento.Text) ||
-                string.IsNullOrEmpty(txtLocalEvento.Text)
-                
-                )
-            {
-                await DisplayAlert("Erro", "Todos os campos devem ser preenchidos.", "OK");
-                return;
-            }
-
-            // Cria o objeto de evento com os dados fornecidos
-            var novoEvento = new App_AEE.Models.Evento
-            {
-                NomeEvento = txtNomeEvento.Text,
-                DataInicio = datePickerDataInicio.Date,
-                DataFim = datePickerDataFim.Date,
-                LocalEvento = txtLocalEvento.Text,
-               
-            };
-
-            // Chama o serviço para criar o evento
-            var sucesso = await _eventoService.CriarEvento(novoEvento);
-
-            if (sucesso)
-            {
-                await DisplayAlert("Sucesso", "Evento criado com sucesso!", "OK");
-                await Navigation.PopAsync(); // Volta para a página anterior
-            }
-            else
-            {
-                await DisplayAlert("Erro", "Ocorreu um erro ao criar o evento.", "OK");
-            }
+            base.OnAppearing();
+            await ListarEventos();
         }
 
-        private async void btnListarEventos_Clicked(object sender, EventArgs e)
+
+
+        private async Task ListarEventos()
         {
             // Chama o serviço para listar os eventos existentes
             var eventos = await _eventoService.ListarEventos();
@@ -59,10 +41,41 @@ namespace App_AEE.Pages
                 // Mostra a lista de eventos
                 eventosCollectionView.ItemsSource = eventos;
             }
-            else
+
+        }
+
+        // Método chamado quando o usuário clicar no botão "Inscrever"
+        public async void InscreverEquipe(Evento evento)
+        {
+            // Lista de equipes do usuário
+            var equipes = await _apiService.ListarEquipesDoUsuario();
+
+            if (equipes == null || equipes.Count == 0)
             {
-                await DisplayAlert("Sem eventos", "Não há eventos cadastrados.", "OK");
+                await DisplayAlert("Erro", "Você não está em nenhuma equipe.", "OK");
+                return;
             }
+
+            // Criar o popup e passar as equipes
+            var popup = new SelecionarEquipePopup(equipes);
+            popup.OnPopupClosed += (equipeSelecionada) =>
+            {
+                // Lógica para inscrever a equipe no evento
+                if (equipeSelecionada != null)
+                {
+                    // Aqui você pode chamar um método para inscrever a equipe no evento
+                    InscreverEquipeNoEvento(evento, equipeSelecionada);
+                }
+            };
+
+            await this.ShowPopupAsync(popup);
+        }
+
+        // Método para inscrever a equipe no evento
+        private async void InscreverEquipeNoEvento(Evento evento, Equipe equipeSelecionada)
+        {
+            // Sua lógica de inscrição aqui
+            await DisplayAlert("Inscrição Confirmada", $"Equipe {equipeSelecionada.NomeEquipe} foi inscrita no evento {evento.NomeEvento}.", "OK");
         }
     }
 }

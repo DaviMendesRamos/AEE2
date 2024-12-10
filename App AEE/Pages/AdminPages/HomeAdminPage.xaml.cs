@@ -20,8 +20,13 @@ public partial class HomeAdminPage : ContentPage
 
     }
 
-    private async void OnInscreverEventoTapped(object sender, EventArgs e)
+    private async void OnCriarEventoTapped(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new EventosPage(_eventosService));
+        await Navigation.PushAsync(new CriarEventoPage(_eventosService));
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+
     }
 }

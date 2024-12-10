@@ -30,8 +30,10 @@ namespace App_AEE
             builder.Services.AddTransient<EventosPage>();
             builder.Services.AddTransient<HomePrincipalPage>();
             builder.Services.AddTransient<ExibirUsuarioPage>();
-            builder.Services.AddTransient<HomeAdminPage>(); // Ou Singleton se preferir uma única instância
-
+            builder.Services.AddTransient<HomeAdminPage>();
+            builder.Services.AddTransient<CriarEquipePage>();
+            builder.Services.AddTransient<EquipesPage>();// Ou Singleton se preferir uma única instância
+            builder.Services.AddTransient<CriarEventoPage>();
             return builder.Build();
         }
     }
