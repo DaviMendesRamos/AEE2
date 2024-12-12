@@ -10,6 +10,8 @@ using System.Net.Http.Headers;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Maui.Controls.PlatformConfiguration;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 
 
 public class ApiService
@@ -56,7 +58,7 @@ public class ApiService
             };
 
             var content = new StringContent(JsonSerializer.Serialize(register, _serializerOptions), Encoding.UTF8, "application/json");
-            var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/Register", content);
+            var response = await PostRequest("http://10.0.2.2:5053/api/Usuarios/Register", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -87,7 +89,7 @@ public class ApiService
 
             // Serializa os dados de login e define o content-type como JSON
             var content = new StringContent(JsonSerializer.Serialize(login, _serializerOptions), Encoding.UTF8, "application/json");
-            var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/Login", content);
+            var response = await PostRequest("http://10.0.2.2:5053/api/Usuarios/Login", content);
 
             // Verifica se a resposta é bem-sucedida
             if (!response.IsSuccessStatusCode)
@@ -173,7 +175,7 @@ public class ApiService
 
 
             // Faz a requisição GET para buscar os dados do usuário
-            var response = await _httpClient.GetAsync("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Usuarios/GetUsuarioAtual");
+            var response = await _httpClient.GetAsync("http://10.0.2.2:5053/api/Usuarios/GetUsuarioAtual");
 
             if (response.IsSuccessStatusCode)
             {
@@ -199,7 +201,7 @@ public class ApiService
         {
             var json = JsonSerializer.Serialize(usuarioAtualizado);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync("https://suaapi.com/api/Usuarios/Editar", content);
+            var response = await _httpClient.PutAsync("http://10.0.2.2:5053/api/Usuarios/Editar", content);
 
             return response.IsSuccessStatusCode;
         }
@@ -216,7 +218,7 @@ public class ApiService
         {
             var content = new MultipartFormDataContent();
             content.Add(new ByteArrayContent(imageArray), "imagem", "image.jpg");
-            var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/usuarios/uploadfotousuario", content);
+            var response = await PostRequest("http://10.0.2.2:5053/api/usuarios/uploadfotousuario", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -235,6 +237,63 @@ public class ApiService
             return new ApiResponse<bool> { ErrorMessage = ex.Message };
         }
     }
+
+
+    public async Task<List<Usuario>> GetUsuariosAsync()
+    {
+        try
+        {
+            // Faz a requisição GET à API para obter os usuários
+            var response = await _httpClient.GetAsync("http://10.0.2.2:5053/api/Usuarios/BuscarUsuariosPorNome"); // Altere o endpoint conforme necessário
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Se a resposta for bem-sucedida, desserializa o corpo da resposta
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var usuarios = JsonSerializer.Deserialize<List<Usuario>>(jsonResponse);
+                return usuarios;
+            }
+            else
+            {
+                // Caso a requisição falhe, você pode lançar um erro ou retornar uma lista vazia
+                throw new Exception("Erro ao obter usuários.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Lidar com exceções, caso ocorra algum erro na requisição
+            Console.WriteLine($"Erro ao buscar usuários: {ex.Message}");
+            return new List<Usuario>(); // Retorna uma lista vazia em caso de erro
+        }
+    }
+    public async Task<bool> AtribuirAdministradorAsync(int usuarioId)
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync("http://10.0.2.2:5053/api/Usuarios/AtribuirAdministrador", usuarioId);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Caso o usuário seja atribuído como administrador com sucesso
+                return true;
+            }
+            else
+            {
+                // Caso a API retorne um erro (status diferente de 2xx)
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Erro ao atribuir administrador: {error}");
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            // Exceção se houver problemas de rede ou algo inesperado
+            Console.WriteLine($"Erro de comunicação com a API: {ex.Message}");
+            return false;
+        }
+    }
+
+
     // Método para criar uma nova equipe
     public async Task<ApiResponse<Equipe>> CriarEquipe(Equipe novaEquipe)
     {
@@ -257,7 +316,7 @@ public class ApiService
            
 
             // Envia a requisição POST para a API
-            var response = await PostRequest("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Equipe/criarEquipe", content);
+            var response = await PostRequest("http://10.0.2.2:5053/api/Equipe/criarEquipe", content);
 
             // Verifica se a resposta foi bem-sucedida
             if (!response.IsSuccessStatusCode)
@@ -292,7 +351,7 @@ public class ApiService
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await _httpClient.GetAsync("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Equipe/equipesDoUsuario");
+        var response = await _httpClient.GetAsync("http://10.0.2.2:5053/api/Equipe/equipesDoUsuario");
 
         if (response.StatusCode == HttpStatusCode.NoContent)
         {
@@ -324,7 +383,7 @@ public class ApiService
     {
         try
         {
-            var response = await _httpClient.GetAsync($"https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Equipe/buscar/{nomeEquipe}");
+            var response = await _httpClient.GetAsync($"http://10.0.2.2:5053/api/Equipe/buscar/{nomeEquipe}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -350,7 +409,7 @@ public class ApiService
     {
         try
         {
-            var response = await _httpClient.DeleteAsync($"https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/Equipe/deletar/{nomeEquipe}");
+            var response = await _httpClient.DeleteAsync($"http://10.0.2.2:5053/api/Equipe/deletar/{nomeEquipe}");
 
             if (!response.IsSuccessStatusCode)
             {

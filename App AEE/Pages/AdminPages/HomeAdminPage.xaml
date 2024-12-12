@@ -18,11 +18,14 @@
                    HasShadow="True"
                    Padding="10"
                    Margin="10">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnAddAdminsTapped" />
+                </Frame.GestureRecognizers>
                 <StackLayout VerticalOptions="Center">
                     <!-- Ícone ou imagem -->
                     <Image Source="equipe.png" HeightRequest="75"  />
                     <!-- Texto do botão -->
-                    <Label Text="SUA EQUIPE"
+                    <Label Text="Adicionar Admins"
                            FontFamily="Arial"
                            FontSize="16"
                            FontAttributes="Bold"

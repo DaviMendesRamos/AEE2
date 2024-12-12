@@ -24,7 +24,10 @@ public partial class HomeAdminPage : ContentPage
     {
         await Navigation.PushAsync(new CriarEventoPage(_eventosService));
     }
-
+    private async void OnAddAdminsTapped(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new AdicionarAdminPage(_apiService));
+    }
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
 

@@ -18,7 +18,7 @@ namespace App_AEE.Services
         // Método para criar um evento
         public async Task<bool> CriarEvento(Evento evento)
         {
-            var response = await _httpClient.PostAsJsonAsync("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/eventos/criar", evento);
+            var response = await _httpClient.PostAsJsonAsync("http://10.0.2.2:5053/api/eventos/criar", evento);
 
             if (response.IsSuccessStatusCode)
             {
@@ -32,7 +32,7 @@ namespace App_AEE.Services
         // Método para editar um evento
         public async Task<bool> EditarEvento(int id, Evento evento)
         {
-            var response = await _httpClient.PutAsJsonAsync("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/eventos/editar/{id}", evento);
+            var response = await _httpClient.PutAsJsonAsync("http://10.0.2.2:5053/api/eventos/editar/{id}", evento);
 
             if (response.IsSuccessStatusCode)
             {
@@ -60,7 +60,7 @@ namespace App_AEE.Services
         // Método para buscar um evento por ID
         public async Task<Evento> BuscarEventoPorId(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<Evento>($"api/eventos/buscar/{id}");
+            var response = await _httpClient.GetFromJsonAsync<Evento>($"http://10.0.2.2:5053/api/eventos/buscar/{id}");
 
             return response;
         }
@@ -68,7 +68,7 @@ namespace App_AEE.Services
         // Método para listar todos os eventos
         public async Task<List<Evento>> ListarEventos()
         {
-            var response = await _httpClient.GetFromJsonAsync<List<Evento>>("https://appaee-a9g2awdggsdmcsc4.brazilsouth-01.azurewebsites.net/api/eventos/listar");
+            var response = await _httpClient.GetFromJsonAsync<List<Evento>>("http://10.0.2.2:5053/api/eventos/listar");
 
             return response;
         }
