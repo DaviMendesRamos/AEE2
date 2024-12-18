@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            
-             x:Class="App_AEE.Pages.AdminPages.AdicionarAdminPage">
+             x:Class="App_AEE.Pages.AdminPages.AdicionarAdminPage"
+             BackgroundColor="#1c1c1c"
+             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+             android:TabbedPage.ToolbarPlacement="Bottom"
+             Shell.BackgroundColor="#1c1c1c">
 
-    <ContentPage.Content>
-        <StackLayout Padding="10">
-            <!-- Pesquisa de Usuários -->
-            <SearchBar x:Name="searchBar"
-                       Placeholder="Pesquisar usuário"
-                       SearchCommand="{Binding BuscarUsuariosCommand}"
-                       SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
-                       HorizontalOptions="FillAndExpand"
-                       Margin="0,10,0,0"/>
+    <ScrollView>
+        <VerticalStackLayout x:Name="UsuariosLayout" Padding="10" Spacing="10" >
 
-            <!-- Lista de Usuários -->
-            <ListView x:Name="usuariosListView"
-                      ItemsSource="{Binding Usuarios}"
-                      ItemSelected="OnUsuarioSelected">
-                <ListView.ItemTemplate>
+            <CollectionView x:Name="UsuariosCollection">
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding Nome}" Detail="{Binding Email}" />
+                        <StackLayout Orientation="Horizontal" Padding="10">
+                            <Label Text="{Binding Nome}" VerticalOptions="Center" TextColor="White" />
+                            <Button 
+                                 Text="{Binding IsAdmin, Converter={StaticResource AdminButtonTextConverter}}"
+                                 BackgroundColor="{Binding IsAdmin, Converter={StaticResource AdminButtonColorConverter}}" 
+                                 TextColor="White"
+                                 Command="{Binding BindingContext.ToggleAdminCommand, Source={x:Reference UsuariosCollection}}"
+                                 CommandParameter="{Binding .}" />
+                        </StackLayout>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-            <!-- Botão para adicionar o usuário como administrador -->
-            <Button Text="Adicionar como Administrador"
-                    Command="{Binding AdicionarAdminCommand}"
-                    IsEnabled="{Binding IsUsuarioSelecionado}" />
-        </StackLayout>
-    </ContentPage.Content>
+        </VerticalStackLayout>
+    </ScrollView>
+   
+       
+    
 </ContentPage>

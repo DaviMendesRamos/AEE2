@@ -8,10 +8,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
+using App_AEE;
 
 
 public class ApiService
@@ -19,11 +19,13 @@ public class ApiService
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApiService> _logger;
     private readonly JsonSerializerOptions _serializerOptions;
+    private readonly string _baseUrl;
 
     public ApiService(HttpClient httpClient, ILogger<ApiService> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
+        _baseUrl = AppConfig.BaseUrl;
         _serializerOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
@@ -34,7 +36,7 @@ public class ApiService
     {
         try
         {
-            var response = await _httpClient.GetAsync("api/status");
+            var response = await _httpClient.GetAsync($"{_baseUrl}status");
             return response.IsSuccessStatusCode;
         }
         catch (Exception ex)
@@ -58,7 +60,7 @@ public class ApiService
             };
 
             var content = new StringContent(JsonSerializer.Serialize(register, _serializerOptions), Encoding.UTF8, "application/json");
-            var response = await PostRequest("http://10.0.2.2:5053/api/Usuarios/Register", content);
+            var response = await PostRequest($"{_baseUrl}Usuarios/Register", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -89,7 +91,7 @@ public class ApiService
 
             // Serializa os dados de login e define o content-type como JSON
             var content = new StringContent(JsonSerializer.Serialize(login, _serializerOptions), Encoding.UTF8, "application/json");
-            var response = await PostRequest("http://10.0.2.2:5053/api/Usuarios/Login", content);
+            var response = await PostRequest($"{_baseUrl}Usuarios/Login", content);
 
             // Verifica se a resposta é bem-sucedida
             if (!response.IsSuccessStatusCode)
@@ -175,7 +177,7 @@ public class ApiService
 
 
             // Faz a requisição GET para buscar os dados do usuário
-            var response = await _httpClient.GetAsync("http://10.0.2.2:5053/api/Usuarios/GetUsuarioAtual");
+            var response = await _httpClient.GetAsync($"{_baseUrl}Usuarios/GetUsuarioAtual");
 
             if (response.IsSuccessStatusCode)
             {
@@ -201,7 +203,7 @@ public class ApiService
         {
             var json = JsonSerializer.Serialize(usuarioAtualizado);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync("http://10.0.2.2:5053/api/Usuarios/Editar", content);
+            var response = await _httpClient.PutAsync($"{_baseUrl}Usuarios/Editar", content);
 
             return response.IsSuccessStatusCode;
         }
@@ -211,14 +213,13 @@ public class ApiService
             return false;
         }
     }
-
     public async Task<ApiResponse<bool>> UploadImagemUsuario(byte[] imageArray)
     {
         try
         {
             var content = new MultipartFormDataContent();
             content.Add(new ByteArrayContent(imageArray), "imagem", "image.jpg");
-            var response = await PostRequest("http://10.0.2.2:5053/api/usuarios/uploadfotousuario", content);
+            var response = await PostRequest($"{_baseUrl}usuarios/uploadfotousuario", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -237,40 +238,17 @@ public class ApiService
             return new ApiResponse<bool> { ErrorMessage = ex.Message };
         }
     }
-
-
-    public async Task<List<Usuario>> GetUsuariosAsync()
+    public async Task<List<Usuario>> ListarUsuarios()
     {
-        try
-        {
-            // Faz a requisição GET à API para obter os usuários
-            var response = await _httpClient.GetAsync("http://10.0.2.2:5053/api/Usuarios/BuscarUsuariosPorNome"); // Altere o endpoint conforme necessário
+        var response = await _httpClient.GetFromJsonAsync<List<Usuario>>($"{_baseUrl}Usuarios/ListarUsuarios");
 
-            if (response.IsSuccessStatusCode)
-            {
-                // Se a resposta for bem-sucedida, desserializa o corpo da resposta
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var usuarios = JsonSerializer.Deserialize<List<Usuario>>(jsonResponse);
-                return usuarios;
-            }
-            else
-            {
-                // Caso a requisição falhe, você pode lançar um erro ou retornar uma lista vazia
-                throw new Exception("Erro ao obter usuários.");
-            }
-        }
-        catch (Exception ex)
-        {
-            // Lidar com exceções, caso ocorra algum erro na requisição
-            Console.WriteLine($"Erro ao buscar usuários: {ex.Message}");
-            return new List<Usuario>(); // Retorna uma lista vazia em caso de erro
-        }
+        return response;
     }
     public async Task<bool> AtribuirAdministradorAsync(int usuarioId)
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync("http://10.0.2.2:5053/api/Usuarios/AtribuirAdministrador", usuarioId);
+            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}Usuarios/AtribuirAdministrador", usuarioId);
 
             if (response.IsSuccessStatusCode)
             {
@@ -292,8 +270,6 @@ public class ApiService
             return false;
         }
     }
-
-
     // Método para criar uma nova equipe
     public async Task<ApiResponse<Equipe>> CriarEquipe(Equipe novaEquipe)
     {
@@ -316,7 +292,7 @@ public class ApiService
            
 
             // Envia a requisição POST para a API
-            var response = await PostRequest("http://10.0.2.2:5053/api/Equipe/criarEquipe", content);
+            var response = await PostRequest($"{_baseUrl}Equipe/criarEquipe", content);
 
             // Verifica se a resposta foi bem-sucedida
             if (!response.IsSuccessStatusCode)
@@ -338,7 +314,6 @@ public class ApiService
             return new ApiResponse<Equipe> { ErrorMessage = ex.Message };
         }
     }
-
     public async Task<List<Equipe>> ListarEquipesDoUsuario()
     {
         var token = Preferences.Get("accesstoken", string.Empty);
@@ -351,7 +326,7 @@ public class ApiService
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await _httpClient.GetAsync("http://10.0.2.2:5053/api/Equipe/equipesDoUsuario");
+        var response = await _httpClient.GetAsync($"{_baseUrl}Equipe/equipesDoUsuario");
 
         if (response.StatusCode == HttpStatusCode.NoContent)
         {
@@ -374,16 +349,27 @@ public class ApiService
             return new List<Equipe>();
         }
 
-        return JsonSerializer.Deserialize<List<Equipe>>(jsonResult, _serializerOptions) ?? new List<Equipe>();
+        // Desserializa a resposta em uma lista de Equipe
+        var equipes = JsonSerializer.Deserialize<List<Equipe>>(jsonResult, _serializerOptions) ?? new List<Equipe>();
+
+        // Verifica se CodEquipe está presente (não é nulo ou zero)
+        foreach (var equipe in equipes)
+        {
+            if (equipe.CodEquipe == null || equipe.CodEquipe == 0)
+            {
+                _logger.LogWarning($"Equipe com nome '{equipe.NomeEquipe}' retornada sem CodEquipe válido.");
+                throw new Exception($"Erro ao processar equipe '{equipe.NomeEquipe}'. Identificador inválido.");
+            }
+        }
+
+        return equipes;
     }
-
-
     // Método para buscar uma equipe pelo nome
     public async Task<ApiResponse<Equipe>> BuscarEquipePorNome(string nomeEquipe)
     {
         try
         {
-            var response = await _httpClient.GetAsync($"http://10.0.2.2:5053/api/Equipe/buscar/{nomeEquipe}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}Equipe/buscar/{nomeEquipe}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -403,13 +389,12 @@ public class ApiService
             return new ApiResponse<Equipe> { ErrorMessage = ex.Message };
         }
     }
-
     // Método para deletar uma equipe pelo nome
     public async Task<ApiResponse<bool>> DeletarEquipePorNome(string nomeEquipe)
     {
         try
         {
-            var response = await _httpClient.DeleteAsync($"http://10.0.2.2:5053/api/Equipe/deletar/{nomeEquipe}");
+            var response = await _httpClient.DeleteAsync($"{_baseUrl}Equipe/deletar/{nomeEquipe}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -426,12 +411,54 @@ public class ApiService
             return new ApiResponse<bool> { ErrorMessage = ex.Message };
         }
     }
-
     // Método auxiliar para requisições POST
-   
+    public async Task<ApiResponse<string>> InscreverEquipeAsync(int codevento, int codequipe)
+    {
+        try
+        {
+            // Recupera o token JWT armazenado localmente (ajuste conforme necessário)
+            var token = Preferences.Get("accesstoken", string.Empty);
+            if (string.IsNullOrEmpty(token))
+            {
+                return new ApiResponse<string> { ErrorMessage = "Token JWT não encontrado." };
+            }
 
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-// Enviar requisição POST
+            // Cria o objeto de requisição
+            var requestPayload = new
+            {
+                CodEvento = codevento,
+                CodEquipe = codequipe
+            };
+            Console.WriteLine($"Dados enviados: EventoId = {codevento}, EquipeId = {codequipe}");
+            // Serializa o objeto de requisição para JSON
+            var json = JsonSerializer.Serialize(requestPayload, _serializerOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Envia a requisição POST para a API
+            var response = await _httpClient.PostAsync($"{_baseUrl}Cadastrar/InscreverEquipe", content);
+
+            // Verifica se a resposta foi bem-sucedida
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Erro ao inscrever equipe: {response.StatusCode} - {errorMessage}");
+                return new ApiResponse<string> { ErrorMessage = errorMessage };
+            }
+
+            // Processa a resposta bem-sucedida
+            var resultado = await response.Content.ReadAsStringAsync();
+
+            return new ApiResponse<string> { Data = resultado };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Erro ao inscrever equipe: {ex.Message}");
+            return new ApiResponse<string> { ErrorMessage = ex.Message };
+        }
+    }
+    // Enviar requisição POST
     private async Task<HttpResponseMessage> PostRequest(string endpoint, HttpContent content)
     {
         try

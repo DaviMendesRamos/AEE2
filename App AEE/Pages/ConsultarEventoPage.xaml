@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="App_AEE.Pages.ConsultarEventoPage"
+            >
+
+    <!-- Aba Detalhes do Evento -->
+    <ContentPage Title="Detalhes do Evento">
+        <ScrollView>
+            <StackLayout Spacing="10" Padding="10">
+                <Label Text="Nome do Evento:" FontAttributes="Bold"/>
+                <Entry Text="Copa Interclasses 2024" IsReadOnly="True"/>
+
+                <Label Text="Data do Evento:" FontAttributes="Bold"/>
+                <Entry Text="18/12/2024" IsReadOnly="True"/>
+
+                <Label Text="Local do Evento:" FontAttributes="Bold"/>
+                <Entry Text="Ginásio Municipal" IsReadOnly="True"/>
+
+                <!-- Botão Editar, visível apenas se IsAdmin for true -->
+                <Button Text="Editar" 
+                        BackgroundColor="Green" 
+                        TextColor="White" 
+                        IsVisible="{Binding IsAdmin}" 
+                        Clicked="EditarEvento_Clicked"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage>
+
+    <!-- Aba Equipes Inscritas -->
+    <ContentPage Title="Equipes Inscritas">
+        <ScrollView>
+            <StackLayout Spacing="10" Padding="10">
+                <Label Text="Equipes Participantes:" FontAttributes="Bold"/>
+
+                <!-- ListView de Equipes -->
+                <ListView ItemsSource="{Binding Equipes}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" Spacing="10">
+                                    <Label Text="{Binding Nome}" FontSize="16" TextColor="Black"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage>
+</TabbedPage>

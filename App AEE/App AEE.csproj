@@ -86,11 +86,17 @@
 
 	<ItemGroup>
 	  <AndroidResource Remove="Data\**" />
+	  <AndroidResource Remove="NovaPasta\**" />
 	  <Compile Remove="Data\**" />
+	  <Compile Remove="NovaPasta\**" />
 	  <EmbeddedResource Remove="Data\**" />
+	  <EmbeddedResource Remove="NovaPasta\**" />
 	  <MauiCss Remove="Data\**" />
+	  <MauiCss Remove="NovaPasta\**" />
 	  <MauiXaml Remove="Data\**" />
+	  <MauiXaml Remove="NovaPasta\**" />
 	  <None Remove="Data\**" />
+	  <None Remove="NovaPasta\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -110,6 +116,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\AppIcon\appiconfg.svg" />
 	  <None Remove="Resources\Fonts\arial.ttf" />
 	  <None Remove="Resources\Images\amistoso.png" />
 	  <None Remove="Resources\Images\equipe.png" />
@@ -154,7 +161,13 @@
 	  <MauiXaml Update="Pages\AdminPages\CriarEventoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\AdminPages\EditarEventosPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\AdminPages\HomeAdminPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\ConsultarEventoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\CriarEquipePage.xaml">
@@ -185,6 +198,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\SelecionarEquipePopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\VerEventosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

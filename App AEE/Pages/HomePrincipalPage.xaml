@@ -87,6 +87,9 @@
                    HasShadow="True"
                    Padding="10"
                    Margin="10">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnVerEventoTapped" />
+                </Frame.GestureRecognizers>
                 <StackLayout VerticalOptions="Center">
                     <!-- Ícone ou imagem -->
                     <Image Source="verevento.png" HeightRequest="75" />

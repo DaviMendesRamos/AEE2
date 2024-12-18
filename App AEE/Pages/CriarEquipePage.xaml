@@ -2,18 +2,62 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_AEE.Pages.CriarEquipePage"
-             Title="CriarEquipePage">
-    <VerticalStackLayout>
-        
-        
-        <Entry x:Name="txtNomeEquipe" Placeholder="Nome da Equipe" />
-        <Entry x:Name="txtModalidade" Placeholder="Modalidade" />
+             BackgroundColor="#1c1c1c"
+             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+             android:TabbedPage.ToolbarPlacement="Bottom"
+             Shell.BackgroundColor="#1c1c1c"
+             >
 
-        <Button Text="Criar Equipe"
-                BackgroundColor="#2f2f2f"
+
+    <Grid RowDefinitions="Auto, *" Padding="20">
+            <!-- Título -->
+            <Label Text="Criar Nova Equipe"
+           FontSize="24"
+           FontAttributes="Bold"
+           HorizontalOptions="Center"
+           VerticalOptions="Start"
+           TextColor="White"
+           Margin="0,20,0,10"/>
+
+            <!-- Formulário Centralizado -->
+            <VerticalStackLayout Grid.Row="1"
+                         Spacing="15"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center">
+
+                <!-- Nome do Evento -->
+                <Entry x:Name="txtNomeEquipe"
+               Placeholder="Nome da Equipe"
+               PlaceholderColor="#A9A9A9"
+               BackgroundColor="#2f2f2f"
+               TextColor="White"
+               WidthRequest="300"
+               HeightRequest="50"
+               Margin="0,0,0,10"
+               HorizontalTextAlignment="Center"/>
+
+                <!-- Local do Evento -->
+                <Entry x:Name="txtModalidade"
+               Placeholder="Modalidade"
+               PlaceholderColor="#A9A9A9"
+               BackgroundColor="#2f2f2f"
+               TextColor="White"
+               WidthRequest="300"
+               HeightRequest="50"
+               Margin="0,0,0,10"
+               HorizontalTextAlignment="Center"/>
+
+                <!-- Botão -->
+                <Button Text="Criar Equipe"
+                Clicked="btnCriarEquipe_Clicked"
+                BackgroundColor="#4CAF50"
                 TextColor="White"
-                FontAttributes="Bold"
-                Clicked="btnCriarEquipe_Clicked" />
+                FontSize="18"
+                CornerRadius="10"
+                WidthRequest="300"
+                HeightRequest="50"/>
 
-    </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+
 </ContentPage>

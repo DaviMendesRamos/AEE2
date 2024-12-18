@@ -34,6 +34,9 @@ namespace App_AEE
             builder.Services.AddTransient<CriarEquipePage>();
             builder.Services.AddTransient<EquipesPage>();// Ou Singleton se preferir uma única instância
             builder.Services.AddTransient<CriarEventoPage>();
+            builder.Services.AddTransient<EditarEventosPage>();
+            builder.Services.AddTransient<VerEventosPage>();
+            builder.Services.AddTransient<ConsultarEventoPage>();
             return builder.Build();
         }
     }

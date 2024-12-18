@@ -2,6 +2,7 @@ using CommunityToolkit.Maui.Views;
 using App_AEE.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace App_AEE.Pages
 {
@@ -15,23 +16,45 @@ namespace App_AEE.Pages
         {
             InitializeComponent();
             Equipes = equipes;
-
-            // Definindo o ItemsSource da CollectionView
             equipesCollectionView.ItemsSource = Equipes;
         }
 
-        // Método que será chamado ao clicar no botão de confirmar
-        private void ConfirmarButton_Clicked(object sender, EventArgs e)
+        // Método chamado quando um item da CollectionView é clicado
+        private void OnItemTapped(object sender, EventArgs e)
         {
-            OnPopupClosed?.Invoke(EquipeSelecionada);
-            this.Close();
+            // Obtemos o Frame que foi tocado e associamos a equipe a ele
+            var tappedFrame = sender as Frame;
+            var equipe = tappedFrame?.BindingContext as Equipe;
+
+            if (equipe != null)
+            {
+                // Atualizando a equipe selecionada
+                EquipeSelecionada = equipe;
+
+                // Atualizando a seleção visualmente
+                equipesCollectionView.SelectedItem = equipe;
+            }
         }
 
-        // Método para lidar com a seleção da equipe
+        // Método que será chamado quando a seleção de item for alterada
         private void EquipesCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Atribuindo a equipe selecionada
+            // Atribuindo a equipe selecionada com base na seleção atual
             EquipeSelecionada = e.CurrentSelection.FirstOrDefault() as Equipe;
+        }
+
+        // Método que será chamado ao clicar no botão de confirmar
+        private async void ConfirmarButton_Clicked(object sender, EventArgs e)
+        {
+            if (EquipeSelecionada == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Erro", "Por favor, selecione uma equipe.", "OK");
+                return;
+            }
+
+            // Invoca o evento para notificar que a equipe foi selecionada
+            OnPopupClosed?.Invoke(EquipeSelecionada);
+            await this.CloseAsync();
         }
     }
 }

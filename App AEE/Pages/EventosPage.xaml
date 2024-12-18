@@ -2,59 +2,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_AEE.Pages.EventosPage"
              BackgroundColor="#1c1c1c"
-             
              Shell.BackgroundColor="#1c1c1c">
-    <ScrollView>       
+    <ScrollView>
         <StackLayout Padding="10" Spacing="20">
 
-        
-
-        <!-- Exibição dos Eventos -->
-        
+            <!-- Exibição dos Eventos -->
             <CollectionView x:Name="eventosCollectionView"
-                    ItemsSource="{Binding Eventos}" 
-                    SelectionMode="None"
-                    Margin="10">
+                            ItemsSource="{Binding Eventos}" 
+                            SelectionMode="None"
+                            Margin="10">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame BackgroundColor="#2f2f2f"
-                       CornerRadius="10"
-                       BorderColor="Gray"
-                       HasShadow="True"
-                       Padding="10"
-                       Margin="10">
+                               CornerRadius="10"
+                               BorderColor="Gray"
+                               HasShadow="True"
+                               Padding="10"
+                               Margin="10">
                             <StackLayout>
                                 <!-- Ícone ou imagem do evento -->
-                                <Image Source="{Binding Imagem}" HeightRequest="75" HorizontalOptions="Center" />
+                                <Image Source="{Binding Imagem}" 
+                                       HeightRequest="75" 
+                                       HorizontalOptions="Center" />
 
                                 <!-- Nome do Evento -->
                                 <Label Text="{Binding NomeEvento}" 
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="White"
-                               HorizontalOptions="Center" />
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center" />
 
                                 <!-- Data do Evento -->
                                 <Label Text="{Binding DataInicio}"
-                               FontSize="14"
-                               TextColor="White"
-                               HorizontalOptions="Center" />
+                                       FontSize="14"
+                                       TextColor="White"
+                                       HorizontalOptions="Center" />
 
-                                <!-- Botão de inscrição ou detalhes -->
+                                <!-- Botão de inscrição -->
                                 <Button Text="Inscrever"
-                                BackgroundColor="#3a3a3a"
-                                TextColor="White"
-                                
-                                Command="{Binding Path=BindingContext.InscreverCommand, Source={x:Reference eventosCollectionView}}"
-                                CommandParameter="{Binding .}"
-                                Margin="0,10,0,0"
-                                HorizontalOptions="Center" />
+                                        BackgroundColor="#4CAF50"
+                                        TextColor="White"
+                                        Command="{Binding Path=BindingContext.InscreverCommand, Source={x:Reference eventosCollectionView}}"
+                                        CommandParameter="{Binding .}"
+                                        Margin="0,10,0,0"
+                                        HorizontalOptions="Center" />
                             </StackLayout>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        
 
         </StackLayout>
     </ScrollView>

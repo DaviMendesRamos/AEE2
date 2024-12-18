@@ -11,6 +11,10 @@ public partial class CriarEventoPage : ContentPage
 		_eventoService = eventoService;
 
     }
+    private async void OnUploadClicked(object sender, EventArgs e)
+    {
+
+    }
 
     private async void btnCriarEvento_Clicked(object sender, EventArgs e)
     {

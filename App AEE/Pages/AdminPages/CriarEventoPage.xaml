@@ -62,6 +62,14 @@
                    Margin="0,0,0,10"
                    HorizontalTextAlignment="Center"/>
 
+
+
+            <Button Text="Upload de foto" 
+                    Clicked="OnUploadClicked"
+                    BackgroundColor="#2f2f2f"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+
             <!-- Botão -->
             <Button Text="Criar Evento"
                     Clicked="btnCriarEvento_Clicked"

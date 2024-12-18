@@ -4,7 +4,7 @@
              xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
              android:TabbedPage.ToolbarPlacement="Bottom"
              x:Class="App_AEE.Pages.AdminPages.HomeAdminPage"
-               Shell.NavBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
              BackgroundColor="#1c1c1c">
 
     <ContentPage.Content>
@@ -80,7 +80,7 @@
                 </StackLayout>
             </Frame>
 
-            <!-- Cartão 4 - Ver Eventos -->
+            <!-- Cartão 4 - Editar Eventos -->
             <Frame Grid.Row="1" Grid.Column="1"
                    BackgroundColor="#2f2f2f"
                    CornerRadius="10"
@@ -88,11 +88,14 @@
                    HasShadow="True"
                    Padding="10"
                    Margin="10">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnEditarEventoTapped" />
+                </Frame.GestureRecognizers>
                 <StackLayout VerticalOptions="Center">
                     <!-- Ícone ou imagem -->
                     <Image Source="verevento.png" HeightRequest="75" />
                     <!-- Texto do botão -->
-                    <Label Text="VER EVENTOS"
+                    <Label Text="EDITAR EVENTOS"
                            FontFamily="Arial"
                            FontSize="16"
                            TextColor="White"

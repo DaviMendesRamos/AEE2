@@ -28,8 +28,15 @@ public partial class HomeAdminPage : ContentPage
     {
         await Navigation.PushAsync(new AdicionarAdminPage(_apiService));
     }
+
+    private async void OnEditarEventoTapped(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new EditarEventosPage(_eventosService));
+    }
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
 
     }
+
+
 }

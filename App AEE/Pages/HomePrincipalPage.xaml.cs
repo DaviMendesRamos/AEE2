@@ -16,4 +16,9 @@ public partial class HomePrincipalPage : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(EventosPage));
     }
+    private async void OnVerEventoTapped(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new VerEventosPage(_eventosService));
+    }
+
 }

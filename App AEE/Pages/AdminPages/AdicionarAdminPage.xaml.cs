@@ -1,8 +1,9 @@
-
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 using App_AEE.Model;
-
 using App_AEE.Services;
 
 namespace App_AEE.Pages.AdminPages
@@ -10,80 +11,84 @@ namespace App_AEE.Pages.AdminPages
     public partial class AdicionarAdminPage : ContentPage
     {
         private readonly ApiService _apiService;
-        public ObservableCollection<Usuario> Usuarios { get; set; }
-        public Command BuscarUsuariosCommand { get; }
-        public Command AdicionarAdminCommand { get; }
-        public Usuario UsuarioSelecionado { get; set; }
-        public bool IsUsuarioSelecionado => UsuarioSelecionado != null;
 
         public AdicionarAdminPage(ApiService apiService)
         {
             InitializeComponent();
-
             _apiService = apiService;
-            Usuarios = new ObservableCollection<Usuario>();
-
-            BuscarUsuariosCommand = new Command<string>(async (nome) => await BuscarUsuarios(nome));
-            AdicionarAdminCommand = new Command(async () => await AdicionarAdmin());
-
-            BindingContext = this;
         }
 
-        // Método para buscar usuários conforme o texto de pesquisa
-        private async Task BuscarUsuarios(string nome)
+        protected override async void OnAppearing()
         {
-            try
+            base.OnAppearing();
+            await ListarUsuarios();
+        }
+
+        private async Task ListarUsuarios()
+        {
+            var usuarios = await _apiService.ListarUsuarios();
+
+            if (usuarios != null && usuarios.Any())
             {
-                // Chama o método para buscar os usuários
-                var usuarios = await _apiService.GetUsuariosAsync(); // Chama o serviço da API
+                UsuariosLayout.Children.Clear();
 
-                // Filtra a lista de usuários pelo nome (se o nome for fornecido)
-                if (!string.IsNullOrEmpty(nome))
-                {
-                    usuarios = usuarios.Where(u => u.Nome.Contains(nome, StringComparison.OrdinalIgnoreCase)).ToList();
-                }
-
-                // Atualiza a lista de usuários na UI
-                Usuarios.Clear();
                 foreach (var usuario in usuarios)
                 {
-                    Usuarios.Add(usuario);
+                    var stackLayout = new StackLayout
+                    {
+                        Orientation = StackOrientation.Horizontal,
+                        Padding = new Thickness(10),
+                        Spacing = 10
+                    };
+
+                    var label = new Label
+                    {
+                        Text = usuario.Nome,
+                        VerticalOptions = LayoutOptions.Center,
+                        HorizontalOptions = LayoutOptions.StartAndExpand,
+                        TextColor = Colors.White
+                    };
+
+                    var button = new Button
+                    {
+                        Text = AdminButtonTextConverter(usuario.IsAdmin),
+                        BackgroundColor = AdminButtonColorConverter(usuario.IsAdmin),
+                        TextColor = Colors.White,
+                        HorizontalOptions = LayoutOptions.End
+                    };
+
+                    button.Clicked += async (sender, args) =>
+                    {
+                        usuario.IsAdmin = !usuario.IsAdmin;
+                        button.Text = AdminButtonTextConverter(usuario.IsAdmin);
+                        button.BackgroundColor = AdminButtonColorConverter(usuario.IsAdmin);
+
+                        bool sucesso = await _apiService.AtribuirAdministradorAsync(usuario.Id);
+
+                        if (!sucesso)
+                        {
+                            usuario.IsAdmin = !usuario.IsAdmin;
+                            button.Text = AdminButtonTextConverter(usuario.IsAdmin);
+                            button.BackgroundColor = AdminButtonColorConverter(usuario.IsAdmin);
+                            await DisplayAlert("Erro", "Não foi possível alterar o estado de administrador.", "OK");
+                        }
+                    };
+
+                    stackLayout.Children.Add(label);
+                    stackLayout.Children.Add(button);
+                    UsuariosLayout.Children.Add(stackLayout);
                 }
-            }
-            catch (Exception ex)
-            {
-                // Em caso de erro, exiba uma mensagem (pode ser um alert ou outro tipo de tratamento)
-                await DisplayAlert("Erro", $"Erro ao buscar usuários: {ex.Message}", "OK");
             }
         }
 
-        // Método chamado quando um usuário é selecionado na lista
-        private void OnUsuarioSelected(object sender, SelectedItemChangedEventArgs e)
+        private string AdminButtonTextConverter(bool isAdmin)
         {
-            UsuarioSelecionado = e.SelectedItem as Usuario;
-            OnPropertyChanged(nameof(IsUsuarioSelecionado));
+            return isAdmin ? "Admin" : "User";
         }
 
-        // Método para atribuir o administrador
-        private async Task AdicionarAdmin()
+        private Color AdminButtonColorConverter(bool isAdmin)
         {
-            if (UsuarioSelecionado != null)
-            {
-                bool sucesso = await _apiService.AtribuirAdministradorAsync(UsuarioSelecionado.Id);
-
-                if (sucesso)
-                {
-                    await DisplayAlert("Sucesso", "Usuário agora é administrador!", "OK");
-                    UsuarioSelecionado = null; // Limpar seleção após sucesso
-                    OnPropertyChanged(nameof(IsUsuarioSelecionado));
-                }
-                else
-                {
-                    await DisplayAlert("Erro", "Falha ao adicionar o usuário como administrador.", "OK");
-                }
-            }
+            return isAdmin ? Colors.Green : Colors.Gray;
         }
     }
-
-    
 }
