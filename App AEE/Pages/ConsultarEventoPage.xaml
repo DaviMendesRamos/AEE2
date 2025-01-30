@@ -1,51 +1,36 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            x:Class="App_AEE.Pages.ConsultarEventoPage"
-            >
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:App_AEE.Pages"
+       x:Class="App_AEE.Pages.ConsultarEventoPage"
+       Title="Detalhes do Evento">
 
-    <!-- Aba Detalhes do Evento -->
-    <ContentPage Title="Detalhes do Evento">
-        <ScrollView>
-            <StackLayout Spacing="10" Padding="10">
-                <Label Text="Nome do Evento:" FontAttributes="Bold"/>
-                <Entry Text="Copa Interclasses 2024" IsReadOnly="True"/>
+    <!-- Definindo as abas -->
+    <TabBar>
+        <Tab Title="Evento">
+            <ContentPage>
+                <StackLayout Padding="10">
+                    <Label Text="{Binding EventoSelecionado.NomeEvento}" FontSize="24" HorizontalOptions="Center" />
+                    <Label Text="{Binding EventoSelecionado.Descricao}" FontSize="16" HorizontalOptions="StartAndExpand" Margin="0,10" />
+                    <Label Text="{Binding EventoSelecionado.DataEvento}" FontSize="16" HorizontalOptions="StartAndExpand" Margin="0,10" />
+                    <Label Text="{Binding EventoSelecionado.LocalEvento}" FontSize="16" HorizontalOptions="StartAndExpand" Margin="0,10" />
+                    <Button Text="Editar Evento" IsVisible="{Binding IsAdmin}" Clicked="EditarEvento_Clicked" Margin="0,10" />
+                </StackLayout>
+            </ContentPage>
+        </Tab>
 
-                <Label Text="Data do Evento:" FontAttributes="Bold"/>
-                <Entry Text="18/12/2024" IsReadOnly="True"/>
-
-                <Label Text="Local do Evento:" FontAttributes="Bold"/>
-                <Entry Text="Ginásio Municipal" IsReadOnly="True"/>
-
-                <!-- Botão Editar, visível apenas se IsAdmin for true -->
-                <Button Text="Editar" 
-                        BackgroundColor="Green" 
-                        TextColor="White" 
-                        IsVisible="{Binding IsAdmin}" 
-                        Clicked="EditarEvento_Clicked"/>
-            </StackLayout>
-        </ScrollView>
-    </ContentPage>
-
-    <!-- Aba Equipes Inscritas -->
-    <ContentPage Title="Equipes Inscritas">
-        <ScrollView>
-            <StackLayout Spacing="10" Padding="10">
-                <Label Text="Equipes Participantes:" FontAttributes="Bold"/>
-
-                <!-- ListView de Equipes -->
-                <ListView ItemsSource="{Binding Equipes}">
-                    <ListView.ItemTemplate>
+        <Tab Title="Equipes">
+            <ContentPage>
+                <CollectionView ItemsSource="{Binding EventoSelecionado.Equipes}">
+                    <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <ViewCell>
-                                <StackLayout Orientation="Horizontal" Spacing="10">
-                                    <Label Text="{Binding Nome}" FontSize="16" TextColor="Black"/>
-                                </StackLayout>
-                            </ViewCell>
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding NomeEquipe}" FontSize="18" />
+                            </StackLayout>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackLayout>
-        </ScrollView>
-    </ContentPage>
-</TabbedPage>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ContentPage>
+        </Tab>
+    </TabBar>
+</Shell>

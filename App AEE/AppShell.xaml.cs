@@ -23,7 +23,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(HomePrincipalPage), typeof(HomePrincipalPage));
         Routing.RegisterRoute(nameof(EventosPage), typeof(EventosPage));
         Routing.RegisterRoute(nameof(EquipesPage), typeof(EquipesPage));
-
+        Routing.RegisterRoute(nameof(ConsultarEventoPage), typeof(ConsultarEventoPage));
         // Configura a visibilidade das páginas
         ConfigureHomeVisibility();
 

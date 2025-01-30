@@ -52,12 +52,12 @@
 
                                 <!-- Botão de inscrição ou detalhes -->
                                 <Button Text="Editar"
-                                        BackgroundColor="#007ACC"
-                                        TextColor="White"
-                                        Command="{Binding Path=BindingContext.EditarCommand, Source={x:Reference eventosCollectionView}}"
-                                        CommandParameter="{Binding .}"
-                                        Margin="0,10,0,0"
-                                        HorizontalOptions="Center" />
+                                       BackgroundColor="#007ACC"
+                                       TextColor="White"
+                                       Command="{Binding Path=BindingContext.EditarCommand, Source={x:Reference eventosCollectionView}}"
+                                       CommandParameter="{Binding .}"
+                                       Margin="0,10,0,0"
+                                       HorizontalOptions="Center" />
                                 <Button Text="Excluir"
                                         BackgroundColor="Red"
                                         TextColor="White"
