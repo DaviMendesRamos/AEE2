@@ -2,5 +2,5 @@
 
 public static class AppConfig
 {
-	public static string BaseUrl { get; set; } = "http://192.168.242.107:5053/api/"; // Ou outro endereço
+	public static string BaseUrl { get; set; } = "http://10.0.2.2:5053/api/"; // Ou outro endereço
 }

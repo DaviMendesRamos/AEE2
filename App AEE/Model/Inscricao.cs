@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App_AEE.Model
 {
-    public class Cadastrar
+    public class Inscricao
     {
         public int CodEquipe { get; set; } // Identificador da equipe
         [JsonIgnore]

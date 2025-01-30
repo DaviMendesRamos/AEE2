@@ -11,7 +11,7 @@ namespace App_AEE.Model
         public int CodEquipe { get; set; } // Chave estrangeira para Cadastrar (Equipe)
         public int CodEvento { get; set; } // Chave estrangeira para Cadastrar (Evento)
 
-        public Cadastrar Cadastrar { get; set; } // Propriedade de navegação para Cadastrar
+        public Inscricao Cadastrar { get; set; } // Propriedade de navegação para Cadastrar
 
         
     }

@@ -437,7 +437,7 @@ public class ApiService
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Envia a requisição POST para a API
-            var response = await _httpClient.PostAsync($"{_baseUrl}Cadastrar/InscreverEquipe", content);
+            var response = await _httpClient.PostAsync($"{_baseUrl}Inscricao/InscreverEquipe", content);
 
             // Verifica se a resposta foi bem-sucedida
             if (!response.IsSuccessStatusCode)
